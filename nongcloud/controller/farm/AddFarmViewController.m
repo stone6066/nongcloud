@@ -777,4 +777,52 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
     return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     
 }
+
+//登录
+-(void)loginNetFuc:(NSString*)usr passWord:(NSString*)psw{
+    [SVProgressHUD showWithStatus:k_Status_Load];
+    //http://192.168.0.21:8080/propies/login/user?userLogin=admin&userPwd=aaaaaa
+//    NSDictionary *paramDict = @{
+//                                @"ut":@"indexVilliageGoods",
+//                                };
+    NSDictionary *paramDict =[self makeUpLoadDict];
+    NSString *urlstr=[NSString stringWithFormat:@"%@%@",BaseUrl,@"propies/login/user?userLogin="];
+    urlstr = [urlstr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    [ApplicationDelegate.httpManager POST:urlstr
+                               parameters:paramDict
+                                 progress:^(NSProgress * _Nonnull uploadProgress) {}
+                                  success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                                      //http请求状态
+                                      if (task.state == NSURLSessionTaskStateCompleted) {
+                                          NSError* error;
+                                          NSDictionary* jsonDic = [NSJSONSerialization
+                                                                   JSONObjectWithData:responseObject
+                                                                   options:kNilOptions
+                                                                   error:&error];
+                                          //NSLog(@"数据：%@",jsonDic);
+                                          NSString *suc=[jsonDic objectForKey:@"msg"];
+                                          
+                                          //
+                                          if ([suc isEqualToString:@"登陆成功"]) {
+                                              //成功
+                                              
+                                              [SVProgressHUD dismiss];
+                                              
+                                              
+                                          } else {
+                                              //失败
+                                              [SVProgressHUD showErrorWithStatus:suc];
+                                                                                    }
+                                          
+                                      } else {
+                                          [SVProgressHUD showErrorWithStatus:k_Error_Network];
+                                         
+                                      }
+                                      
+                                  } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                                      //请求异常
+                                      [SVProgressHUD showErrorWithStatus:k_Error_Network];
+                            }];
+    
+}
 @end
