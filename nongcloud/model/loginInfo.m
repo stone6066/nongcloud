@@ -8,22 +8,20 @@
 
 #import "loginInfo.h"
 
-//"userId":68,
-//"positionId":2,
-//"levelId":1,
-//"userName":"测试用户",
-//"userPhone":"15111111111",
-//"createTime":1467011137000,
-//"lastLoginIp":"127.0.0.1",
-//"lastLoginTime":1467011177000,
-//"userStatus":1,
-//"deleteStatus":0,
-//"createuserId":2,
-//"communityId":6,
-//"lockNum":0,
-//"lockTime":1467011177000,
-//"lockIp":null,
-//"communityName":"罗马公元"
+//"userId":1,
+//"userName":"超级管理员",
+//"userPhone":"13711111111",
+//"userLogin":"admin",
+//"userPassword":"0b4e7a0e5fe84ad35fb5f95b9ceeac79",
+//"deleteState":1,
+//"nationId":1,
+//"lastLongitude":"1121212.11",
+//"lastLatitude":"121312.33",
+//"createTime":null,
+//"orgCode":"100",
+//"orgLevel":1,
+//"pushToken":"0",
+//"portrait":null
 
 
 @implementation loginInfo
@@ -35,13 +33,20 @@
     for (NSDictionary *dicttmp in dictArray) {
         
     
-    LGInfo.userId=[[dicttmp objectForKey:@"userId"]stringValue];
-    LGInfo.positionId=[[dicttmp objectForKey:@"positionId"]stringValue];
-    LGInfo.levelId=[[dicttmp objectForKey:@"levelId"]stringValue];
-    LGInfo.userName=[dicttmp objectForKey:@"userName"];
-    LGInfo.userPhone=[dicttmp objectForKey:@"userPhone"];
-    LGInfo.communityId=[[dicttmp objectForKey:@"communityId"]stringValue];
-    LGInfo.communityName=[dicttmp objectForKey:@"communityName"];
+        LGInfo.userId=[[dicttmp objectForKey:@"userId"]stringValue];
+        LGInfo.userName=[dicttmp objectForKey:@"userName"];
+        LGInfo.userPhone=[dicttmp objectForKey:@"userPhone"];
+
+        LGInfo.deleteState=[[dicttmp objectForKey:@"deleteState"]stringValue];
+        LGInfo.nationId=[[dicttmp objectForKey:@"nationId"]stringValue];
+        LGInfo.nationId=[dicttmp objectForKey:@"nationId"];
+        LGInfo.lastLongitude=[dicttmp objectForKey:@"lastLongitude"];
+        LGInfo.lastLatitude=[dicttmp objectForKey:@"lastLatitude"];
+        LGInfo.createTime=[dicttmp objectForKey:@"createTime"];
+        LGInfo.orgCode=[dicttmp objectForKey:@"orgCode"];
+        LGInfo.orgLevel=[dicttmp objectForKey:@"orgLevel"];
+        LGInfo.pushToken=[dicttmp objectForKey:@"pushToken"];
+        LGInfo.portrait=[dicttmp objectForKey:@"portrait"];
     
     }
     //NSLog(@"ownerId:%@",LGInfo.ownerId);

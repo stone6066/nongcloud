@@ -27,5 +27,5 @@
 
 @property(nonatomic,copy)NSString *maxLimit;//上限值
 @property(nonatomic,copy)NSString *minLimit;//下限值
-
+@property(nonatomic,copy)NSString *devId;//设备在内存中的id，用来标识本条设备数据
 @end

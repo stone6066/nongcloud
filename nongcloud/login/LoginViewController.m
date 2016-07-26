@@ -80,14 +80,14 @@
     [self.view addSubview:_LoginBtn];
 }
 -(void)clickloginbtn{
-    [self loginSuccPro];
-//    if ( _UsrTxtF.text.length<1) {
-//        return;
-//    }
-//    if ( _PassTxtF.text.length<1) {
-//        return;
-//    }
-//    [self loginNetFuc:_UsrTxtF.text passWord:_PassTxtF.text];
+    //[self loginSuccPro];
+    if ( _UsrTxtF.text.length<1) {
+        return;
+    }
+    if ( _PassTxtF.text.length<1) {
+        return;
+    }
+    [self loginNetFuc:_UsrTxtF.text passWord:_PassTxtF.text];
 }
 
 -(void)loginSuccPro{
@@ -112,10 +112,13 @@
 -(void)loginNetFuc:(NSString*)usr passWord:(NSString*)psw{
     [SVProgressHUD showWithStatus:k_Status_Load];
     //http://192.168.0.21:8080/propies/login/user?userLogin=admin&userPwd=aaaaaa
+    //http://192.168.0.211:8083/Former/login/user?userLogin=admin&userPwd=aaaaaa
     NSDictionary *paramDict = @{
                                 @"ut":@"indexVilliageGoods",
                                 };
-    NSString *urlstr=[NSString stringWithFormat:@"%@%@%@%@%@",BaseUrl,@"propies/login/user?userLogin=",_UsrTxtF.text,@"&userPwd=",_PassTxtF.text];
+    //NSString *urlstr=[NSString stringWithFormat:@"%@%@",BaseUrl,@"Former/login/user?userLogin=admin&userPwd=aaaaaa"];
+    NSString *urlstr=[NSString stringWithFormat:@"%@%@%@%@%@",BaseUrl,@"Former/login/user?userLogin=",usr,@"&userPwd=",psw];
+
     urlstr = [urlstr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [ApplicationDelegate.httpManager POST:urlstr
                                parameters:paramDict
@@ -132,7 +135,7 @@
                                           NSString *suc=[jsonDic objectForKey:@"msg"];
                                           
                                           //
-                                          if ([suc isEqualToString:@"登陆成功"]) {
+                                          if ([suc isEqualToString:@"success"]) {
                                               //成功
                                               loginInfo *LGIN=[[loginInfo alloc]init];
                                               ApplicationDelegate.myLoginInfo=[LGIN asignInfoWithDict:jsonDic];

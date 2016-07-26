@@ -244,10 +244,10 @@ typedef enum {
     }
 }
 
-- (void)showMenuInView:(UIView *)view fromRect:(CGRect)rect menuItems:(NSArray *)menuItems selected:(YCXMenuSelectedItem)selectedItem {
+- (void)showMenuInView:(UIView *)view fromRect:(CGRect)rect menuItems:(NSArray *)menuItems itemWidth:(CGFloat)iWidth selected:(YCXMenuSelectedItem)selectedItem {
     _menuItems = menuItems;
     _selectedItem = selectedItem;
-    _contentView = [self mkContentView];
+    _contentView = [self mkContentView:iWidth];//[self mkContentView];
     [self addSubview:_contentView];
     
     [self setupFrameInView:view fromRect:rect];
@@ -305,7 +305,7 @@ typedef enum {
     }
 }
 
-- (UIView *) mkContentView {
+- (UIView *) mkContentView:(CGFloat)iWidth {
     for (UIView *v in self.subviews) {
         [v removeFromSuperview];
     }
@@ -341,7 +341,7 @@ typedef enum {
         const CGSize imageSize = menuItem.image.size;
         
         const CGFloat itemHeight = MAX(titleSize.height, imageSize.height) + kMarginY * 2;
-        const CGFloat itemWidth =[UIScreen mainScreen].bounds.size.width-90; //((!menuItem.enabled && !menuItem.image) ? titleSize.width : maxImageWidth + titleSize.width) + kMarginX * 4;
+        const CGFloat itemWidth =iWidth;//[UIScreen mainScreen].bounds.size.width-90; //((!menuItem.enabled && !menuItem.image) ? titleSize.width : maxImageWidth + titleSize.width) + kMarginX * 4;
         
         if (itemHeight > maxItemHeight)
             maxItemHeight = itemHeight;
@@ -721,8 +721,8 @@ static BOOL                          gHasShadow = NO;
 
 #pragma mark Public Methods
 
-+ (void)showMenuInView:(UIView *)view fromRect:(CGRect)rect menuItems:(NSArray *)menuItems selected:(YCXMenuSelectedItem)selectedItem {
-    [[self sharedMenu] showMenuInView:view fromRect:rect menuItems:menuItems selected:selectedItem];
++ (void)showMenuInView:(UIView *)view fromRect:(CGRect)rect menuItems:(NSArray *)menuItems itemWidth:(CGFloat)iWidth selected:(YCXMenuSelectedItem)selectedItem  {
+    [[self sharedMenu] showMenuInView:view fromRect:rect menuItems:menuItems itemWidth:iWidth selected:selectedItem ];
 }
 
 + (void)dismissMenu {
@@ -742,7 +742,7 @@ static BOOL                          gHasShadow = NO;
 
 #pragma mark Private Methods
 
-- (void)showMenuInView:(UIView *)view fromRect:(CGRect)rect menuItems:(NSArray *)menuItems selected:(YCXMenuSelectedItem)selectedItem {
+- (void)showMenuInView:(UIView *)view fromRect:(CGRect)rect menuItems:(NSArray *)menuItems  itemWidth:(CGFloat)iWidth selected:(YCXMenuSelectedItem)selectedItem {
     NSParameterAssert(view);
     NSParameterAssert(menuItems.count);
     
@@ -758,7 +758,7 @@ static BOOL                          gHasShadow = NO;
     
     // 创建MenuView
     _menuView = [[YCXMenuView alloc] init];
-    [_menuView showMenuInView:view fromRect:rect menuItems:menuItems selected:selectedItem];
+    [_menuView showMenuInView:view fromRect:rect menuItems:menuItems itemWidth:iWidth selected:selectedItem ];
     self.isShow = YES;
 }
 

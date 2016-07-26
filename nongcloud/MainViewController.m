@@ -28,7 +28,7 @@
     [self loadTopImg];
     [self loadBottomView];
     _dataSource = [[NSMutableArray alloc]init];
-    [self dataSectionArray];
+    //[self dataSectionArray];
     [self loadHomeCollectionView];
     
     // Do any additional setup after loading the view.
@@ -69,15 +69,15 @@
         LoginViewController *vc = [[LoginViewController alloc]init];
         vc.loginSuccBlock = ^(LoginViewController *aqrvc){
             NSLog(@"login_suc");
-            
+            [self loadCollectionViewData:0];
             //[self loadTableData:ApplicationDelegate.myLoginInfo.communityId  pageNo:1];
         };
         self.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:NO];
         self.hidesBottomBarWhenPushed = NO;
     }
-    //    else
-    //        [self drawMainVc];
+    else
+        [self loadCollectionViewData:0];
     
 }
 
@@ -222,15 +222,10 @@
 -(void)loadCollectionViewData:(NSInteger)pageNo{
     [SVProgressHUD showWithStatus:k_Status_Load];
     
-    NSDictionary *paramDict = @{
-                                @"ut":@"indexVilliageGoods",
-                                @"pageNo":[NSString stringWithFormat:@"%d",1],
-                                @"pageSize":[NSString stringWithFormat:@"%d",20]
-                                };
-    NSString *urlstr=[NSString stringWithFormat:@"%@%@%@",BaseUrl,BasePath,@"interface/getmainpagegoods.htm"];
+    NSString *urlstr=[NSString stringWithFormat:@"%@%@%@",BaseUrl,@"Former/farm/farmInfo?userId=",ApplicationDelegate.myLoginInfo.userId];
     NSLog(@"urlstr:%@",urlstr);
     [ApplicationDelegate.httpManager POST:urlstr
-                               parameters:paramDict
+                               parameters:nil
                                  progress:^(NSProgress * _Nonnull uploadProgress) {}
                                   success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
                                       //http请求状态
@@ -241,15 +236,35 @@
                                                                    options:kNilOptions
                                                                    error:&error];
                                           //NSLog(@"数据：%@",jsonDic);
-                                          NSString *suc=[jsonDic objectForKey:@"result"];
+                                          NSString *suc=[jsonDic objectForKey:@"msg"];
                                           
                                           //
-                                          if ([suc isEqualToString:@"true"]) {
+                                          if ([suc isEqualToString:@"success"]) {
                                               //成功
-                                             
+                                              farmModel * FM=[[farmModel alloc]init];
+                                              _dataSource=[FM asignInfoWithDict:jsonDic];
+                                              
+                                              farmModel *FM1=[[farmModel alloc]init];
+                                              FM1.farmName=[NSString stringWithFormat:@"%@",@"新建"];
+                                              FM1.farmImg=@"addFarm";
+                                              FM1.farmId=@"-1";
+                                              [_dataSource addObject:FM1];
+                                              [self.collectionView reloadData];
                                               [SVProgressHUD dismiss];
                                               
-                                          } else {
+                                          }else if([suc isEqualToString:@"无数据"])
+                                          {
+                                              farmModel *FM1=[[farmModel alloc]init];
+                                              FM1.farmName=[NSString stringWithFormat:@"%@",@"新建"];
+                                              FM1.farmImg=@"addFarm";
+                                              FM1.farmId=@"-1";
+                                              [_dataSource removeAllObjects];
+                                              [_dataSource addObject:FM1];
+                                              [self.collectionView reloadData];
+                                              [SVProgressHUD dismiss];
+
+                                          }
+                                          else {
                                               //失败
                                               [SVProgressHUD showErrorWithStatus:k_Error_WebViewError];
                                               

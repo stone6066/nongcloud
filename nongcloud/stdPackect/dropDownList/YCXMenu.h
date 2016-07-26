@@ -18,7 +18,7 @@ typedef enum {
 
 @interface YCXMenu : NSObject
 
-+ (void)showMenuInView:(UIView *)view fromRect:(CGRect)rect menuItems:(NSArray *)menuItems selected:(YCXMenuSelectedItem)selectedItem;
++ (void)showMenuInView:(UIView *)view fromRect:(CGRect)rect menuItems:(NSArray *)menuItems itemWidth:(CGFloat)iWidth selected:(YCXMenuSelectedItem)selectedItem ;
 
 + (void)dismissMenu;
 + (BOOL)isShow;

@@ -44,6 +44,16 @@
 }
 -(void)keyboardHide:(UITapGestureRecognizer*)tap{
     [_DevIdTxt resignFirstResponder];
+    [_FarmName resignFirstResponder];
+    [_DevName resignFirstResponder];
+    [_DevNameTxt resignFirstResponder];
+    [_DevAddrTxt resignFirstResponder];
+    [_SubDevIdTxt resignFirstResponder];
+    [_SubDevControl1 resignFirstResponder];
+    [_SubDevControl2 resignFirstResponder];
+    [_SubDevControl3 resignFirstResponder];
+    [_SubDevControl4 resignFirstResponder];
+
 }
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -93,7 +103,7 @@
 
 -(void)clickleftbtn
 {
-    [self makeUpLoadDict];
+    
     [self.navigationController popViewControllerAnimated:NO];
 }
 
@@ -101,11 +111,16 @@
     UIView *topVc=[[UIView alloc]initWithFrame:CGRectMake(0, TopSeachHigh, fDeviceWidth, 80)];
     
     _FarmName=[[UITextField alloc]initWithFrame:CGRectMake(10, 10, (fDeviceWidth-20), 30)];
-    _Farm_type=[[UITextField alloc]initWithFrame:CGRectMake(10, 50, (fDeviceWidth-20), 30)];
+    
+    _Farm_type=[[stdTextField alloc]initWithFrame:CGRectMake(10, 50, (fDeviceWidth-20), 30) titletxt:@"请选择养殖种类" stdImg:@"dropArrow" sendtag:6];
+    [self.rightDevMenu addSubview:_oneStd];
+    
+//    _Farm_type=[[UITextField alloc]initWithFrame:CGRectMake(10, 50, (fDeviceWidth-20), 30)];
     [self stdInitTxtF:_FarmName hintxt:@"请输入农场名称"];
-    [self stdInitTxtF:_Farm_type hintxt:@"请输入养殖种类"];
+    //[self stdInitTxtF:_Farm_type hintxt:@"请输入养殖种类"];
     [topVc addSubview:_FarmName];
     [topVc addSubview:_Farm_type];
+    _Farm_type.stdtxtDelegate=self;
     [self.view addSubview:topVc];
 }
 
@@ -124,7 +139,7 @@
 
 static NSString * const MarketCellId = @"DevTableCell";
 -(void)loadTableView{
-    CGFloat devH= (fDeviceHeight-TopSeachHigh-80)/2;
+    CGFloat devH= (fDeviceHeight-TopSeachHigh-80)/2-40;
     
     UIView *devVc=[[UIView alloc]initWithFrame:CGRectMake(0, TopSeachHigh+80, fDeviceWidth, devH)];
     UILabel * devList=[[UILabel alloc]initWithFrame:CGRectMake(10, 10, 90, 30)];
@@ -192,14 +207,61 @@ static NSString * const MarketCellId = @"DevTableCell";
 -(void)clickSubAddBtn{
     if (_tableDataSource.count>0) {
         [self popRighmenu:self.rightSubDevMenu];
+         _subDeviceShowType=0;
+        _DevNameTxt.text=@"";
+        
+        [_threeSubStd setTitleLableTxt:@"设备类型"];
+        [_threeSubStd setTxtId:@""];
+        
+        [_oneSubStd setTitleLableTxt:@"厂家"];
+        [_oneSubStd setTxtId:@""];
+        
+        [_twoSubStd setTitleLableTxt:@"设备型号"];
+        [_twoSubStd setTxtId:@""];
+        
+        _DevAddrTxt.text=@"";
+        _SubDevIdTxt.text=@"";
+        
+        _SubDevControl1.text=@"";
+        _SubDevControl2.text=@"";
+        _SubDevControl3.text=@"";
+        _SubDevControl4.text=@"";
+        _SubDevMaxValue.text=@"";
+        _SubDevMinValue.text=@"";
     }
     else
     [stdPubFunc stdShowMessage:@"请先添加一个设备"];
-    
 }
+-(void)alertSubDev:(deviceInfo*)dev{
+    _subDeviceShowType=1;
+    [self popRighmenu:self.rightSubDevMenu];
+        
+    _DevNameTxt.text=dev.devName;
+        
+    [_threeSubStd setTitleLableTxt:dev.devType];
+    [_threeSubStd setTxtId:dev.devTypeId];
+        
+    [_oneSubStd setTitleLableTxt:dev.devFactory];
+    [_oneSubStd setTxtId:dev.devFactoryId];
+        
+    [_twoSubStd setTitleLableTxt:dev.devVersion];
+    [_twoSubStd setTxtId:dev.devVersionId];
+    
+    _DevAddrTxt.text=dev.devAddr;
+    _SubDevIdTxt.text=dev.devNo;
+    
+    _SubDevControl1.text=dev.controlPip1;
+    _SubDevControl2.text=dev.controlPip2;
+    _SubDevControl3.text=dev.controlPip3;
+    _SubDevControl4.text=dev.controlPip4;
+    _SubDevMaxValue.text=dev.maxLimit;
+    _SubDevMinValue.text=dev.minLimit;
+    
+    }
+
 static NSString * const SubDevCellId = @"SubDevTableCell";
 -(void)loadSubTableView{
-    CGFloat devH= (fDeviceHeight-TopSeachHigh-80)/2;
+    CGFloat devH= (fDeviceHeight-TopSeachHigh-80)/2-40;
     
     UIView *devVc=[[UIView alloc]initWithFrame:CGRectMake(0, TopSeachHigh+80+devH, fDeviceWidth, devH)];
     UILabel * devList=[[UILabel alloc]initWithFrame:CGRectMake(10, 10, 90, 30)];
@@ -262,6 +324,22 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
         }];
         
     }
+    [self addUpInfoBtn];
+}
+
+-(void)addUpInfoBtn{
+    UIImageView *logobtnImg=[[UIImageView alloc]initWithFrame:CGRectMake(20, fDeviceHeight-60, fDeviceWidth-40, 50)];
+    logobtnImg.image=[UIImage imageNamed:@"logBtn"];
+    [self.view addSubview:logobtnImg];
+    
+    UIButton *UpInfoBtn=[[UIButton alloc]initWithFrame:CGRectMake(20, fDeviceHeight-70, fDeviceWidth-40, 60)];
+    [self.view addSubview:UpInfoBtn];
+    [UpInfoBtn addTarget:self action:@selector(clickUpinfo) forControlEvents:UIControlEventTouchUpInside];
+    
+    [UpInfoBtn setTitle:@"保   存"forState:UIControlStateNormal];// 添加文字
+}
+-(void)clickUpinfo{
+    [self addFarmToSrvFuc];
 }
 -(void)initRighmenuView{
     if (self.rightDevMenu == nil) {
@@ -328,6 +406,7 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
 }
 
 -(void)clickAddToTable{
+    
     deviceInfo *DEV=[[deviceInfo alloc]init];
     DEV.devName=_DevName.text;
     DEV.devType=_oneStd.titleLable.text;
@@ -340,19 +419,43 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
     DEV.devVersionId=_threeStd.txtId;
     
     DEV.devNo=_DevIdTxt.text;
-    [_tableDataSource addObject:DEV];
+    
+   
+    if (_deviceShowType==0) {//新建设备
+        if (_tableDataSource.count>0) {//新加的id比数组最后一个id大1
+            deviceInfo *devtmp=_tableDataSource[_tableDataSource.count-1];
+            NSString* idtmp= devtmp.devId;
+            NSInteger ii=[idtmp integerValue];
+            ii+=1;
+            idtmp=[NSString stringWithFormat:@"%lu",(unsigned long)ii];
+            DEV.devId=idtmp;
+            
+        }
+        else
+            DEV.devId=@"1";
+         [_tableDataSource addObject:DEV];
+    }
+    else{//编辑设备
+            deviceInfo *devtmp=_tableDataSource[_selectedTableIndex];
+            DEV.devId=devtmp.devId;
+        [_tableDataSource replaceObjectAtIndex:_selectedTableIndex withObject:DEV];
+    }
+    
+    
+   
     [self.TableView reloadData];
     
     [self hideRighMenu:self.rightDevMenu];
     
 }
 -(void)TextFieldDelegate:(UIButton*)sender{
-    NSMutableArray *itemTmp;
-    itemTmp=[self makeItems:sender.tag];
+    
+//    NSMutableArray *itemTmp;
+//    itemTmp=[self makeItems:sender.tag];
     UIWindow * window=[[[UIApplication sharedApplication] delegate] window];
     CGRect rect=[sender convertRect: sender.bounds toView:window];
-    
-    [self drawDropDownList:rect.origin.x+rect.size.width/2 ListY:rect.origin.y+rect.size.height items:itemTmp drawSender:sender.tag];
+ 
+    [self getDataType:sender.tag popRect:rect];
 }
 -(void)devMenuCilck{
     [self hideRighMenu:self.rightDevMenu];
@@ -378,15 +481,101 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
     }];
 }
 -(void)clickAddBtn{
-    //[self initMyVar];
+    _deviceShowType=0;
     [self popRighmenu:self.rightDevMenu];
+    _DevName.text=@"";
     [_oneStd setTitleLableTxt:@"设备类型"];
     [_twoStd setTitleLableTxt:@"厂家"];
     [_threeStd setTitleLableTxt:@"型号"];
     [_DevIdTxt setText:@""];
 }
-
+-(void)alertDev:(deviceInfo*)dev{
+    _deviceShowType=1;
+    [self popRighmenu:self.rightDevMenu];
+    
+    _DevName.text=dev.devName;
+    
+    [_oneStd setTitleLableTxt:dev.devType];
+    [_oneStd setTxtId:dev.devTypeId];
+    
+    [_twoStd setTitleLableTxt:dev.devFactory];
+    [_twoStd setTxtId:dev.devFactoryId];
+    
+    [_threeStd setTitleLableTxt:dev.devVersion];
+    [_threeStd setTxtId:dev.devVersionId];
+    
+    [_DevIdTxt setText:dev.devNo];
+}
 #pragma mark table delegate
+-(NSArray* )tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewRowAction *deleteRoWAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"删除" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {//title可自已定义
+            if (tableView.tag==0) {
+        
+                deviceInfo *dev=_tableDataSource[indexPath.item];
+                NSString *keystr=dev.devId;
+                [_SubDevDict removeObjectForKey:keystr];//删除对应的子设备
+        
+                [_tableDataSource removeObjectAtIndex:indexPath.item];//删除设备
+                _SubTableDataSource=nil;
+        
+                [_SubTableView reloadData];
+        
+        
+            }
+            else
+            {
+                [_SubTableDataSource removeObjectAtIndex:indexPath.item];
+                [self setSubDevDictFromArr];
+            }
+            [tableView reloadData];
+    }];//此处是iOS8.0以后苹果最新推出的api，UITableViewRowAction，Style是划出的标签颜色等状态的定义，这里也可自行定义
+    
+    UITableViewRowAction *editRowAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"编辑" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+        if (tableView.tag==0) {
+            deviceInfo *dev=_tableDataSource[indexPath.item];
+            [self alertDev:dev];
+        }
+        else{
+            deviceInfo *dev=_SubTableDataSource[indexPath.item];
+            [self alertSubDev:dev];
+        }
+        
+    }];
+    editRowAction.backgroundColor = [UIColor colorWithRed:0 green:124/255.0 blue:223/255.0 alpha:1];//可以定义RowAction的颜色
+    return @[deleteRoWAction, editRowAction];//最后返回这俩个RowAction 的数组
+    
+}
+////按钮显示的内容
+//- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
+//    
+//    return @"删除";
+//    
+//}
+////这里就是点击删除执行的方法
+//- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+//    NSLog(@"%ld",(long)indexPath.item);
+//    if (tableView.tag==0) {
+//        
+//        deviceInfo *dev=_tableDataSource[indexPath.item];
+//        NSString *keystr=dev.devId;
+//        [_SubDevDict removeObjectForKey:keystr];//删除对应的子设备
+//       
+//        [_tableDataSource removeObjectAtIndex:indexPath.item];//删除设备
+//        _SubTableDataSource=nil;
+//        
+//        [_SubTableView reloadData];
+//        
+//        
+//    }
+//    else
+//    {
+//        [_SubTableDataSource removeObjectAtIndex:indexPath.item];
+//        [self setSubDevDictFromArr];
+//    }
+//    [tableView reloadData];
+//}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (tableView.tag==0) {
@@ -426,118 +615,23 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
     return 40;//餐企商超
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    _selectedTableIndex=indexPath.item;
     if (tableView.tag==0)
     {
-//        if (_SubDevData.count>indexPath.item) {
-//            
-//            _SubTableDataSource=_SubDevData[indexPath.item];
-//            
-//            
-//            
-//        }
-//        else
-//        {
-//            _SubTableDataSource=nil;
-//            _SubTableDataSource=[[NSMutableArray alloc]init];
-//            //[_SubTableDataSource removeAllObjects];
-//            
-//        }
-        NSString * keyTmp=[NSString stringWithFormat:@"%ld",(long)indexPath.item];
-        _SubTableDataSource=[_SubDevDict objectForKey:keyTmp];
+        deviceInfo *dev=_tableDataSource[indexPath.item];
+        _SubTableDataSource=[_SubDevDict objectForKey:dev.devId];
        [_SubTableView reloadData];
+       
     }
 }
 
--(NSMutableArray *)makeItems:(NSInteger)itemType {
-    NSMutableArray *itemData=[[NSMutableArray alloc]init];
-    
-    switch (itemType) {
-        case 0:
-            itemData = [@[
-                          [YCXMenuItem menuItem:@"RTU节点"
-                                          image:nil
-                                            tag:100
-                                       userInfo:@{@"title":@"Menu"}
-                                         menuId:@"0"],
-                          [YCXMenuItem menuItem:@"摄像头"
-                                          image:nil
-                                            tag:101
-                                       userInfo:@{@"title":@"Menu"}
-                                         menuId:@"1"],
-                          [YCXMenuItem menuItem:@"温湿度传感器"
-                                          image:nil
-                                            tag:102
-                                       userInfo:@{@"title":@"Menu"}
-                                         menuId:@"2"],
-                          [YCXMenuItem menuItem:@"光照传感器"
-                                          image:nil
-                                            tag:103
-                                       userInfo:@{@"title":@"Menu"}
-                                         menuId:@"3"],
-                          [YCXMenuItem menuItem:@"土壤温湿度传感器"
-                                          image:nil
-                                            tag:104
-                                       userInfo:@{@"title":@"Menu"}
-                                         menuId:@"4"]
-                          
-                          ] mutableCopy];
-            break;
-        case 1:
-            itemData = [@[
-                          [YCXMenuItem menuItem:@"天安在线"
-                                          image:nil
-                                            tag:100
-                                       userInfo:@{@"title":@"Menu"}
-                                         menuId:@"0"],
-                          [YCXMenuItem menuItem:@"先华通信"
-                                          image:nil
-                                            tag:101
-                                       userInfo:@{@"title":@"Menu"}
-                                         menuId:@"1"],
-                          [YCXMenuItem menuItem:@"海康"
-                                          image:nil
-                                            tag:102
-                                       userInfo:@{@"title":@"Menu"}
-                                         menuId:@"2"]
-                          
-                          
-                          ] mutableCopy];
 
-            break;
-        case 2:
-            itemData = [@[
-                          [YCXMenuItem menuItem:@"接触式无线CCD"
-                                          image:nil
-                                            tag:100
-                                       userInfo:@{@"title":@"Menu"}
-                                         menuId:@"0"],
-                          [YCXMenuItem menuItem:@"有线有源传感"
-                                          image:nil
-                                            tag:101
-                                       userInfo:@{@"title":@"Menu"}
-                                         menuId:@"1"],
-                          [YCXMenuItem menuItem:@"控制器"
-                                          image:nil
-                                            tag:102
-                                       userInfo:@{@"title":@"Menu"}
-                                         menuId:@"2"]
-                          
-                          
-                          ] mutableCopy];
-            break;
-        default:
-            break;
-    }
-   
-    return itemData;
-}
--(void)drawDropDownList:(CGFloat)X ListY:(CGFloat)Y  items:(NSMutableArray *)itemArr drawSender:(NSInteger)senderIndex{
+-(void)drawDropDownList:(CGFloat)X ListY:(CGFloat)Y itemWidth:(CGFloat)iWidth items:(NSMutableArray *)itemArr drawSender:(NSInteger)senderIndex{
     [YCXMenu setTintColor:MyGrayColor];
     if ([YCXMenu isShow]){
         [YCXMenu dismissMenu];
     } else {
-        
-        [YCXMenu showMenuInView:self.view fromRect:CGRectMake(X, Y, 0, 0) menuItems:itemArr selected:^(NSInteger index, YCXMenuItem *item) {
+        [YCXMenu showMenuInView:self.view  fromRect:CGRectMake(X, Y, 0, 0) menuItems:itemArr itemWidth:iWidth selected:^(NSInteger index, YCXMenuItem *item ) {
             
             switch (senderIndex) {
                 case 0:
@@ -552,6 +646,22 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
                     [_threeStd setTitleLableTxt:item.title];
                     [_threeStd setTxtId:item.menuId];
                     break;
+                case 3:
+                    [_threeSubStd setTitleLableTxt:item.title];
+                    [_threeSubStd setTxtId:item.menuId];
+                    break;
+                case 4:
+                    [_oneSubStd setTitleLableTxt:item.title];
+                    [_oneSubStd setTxtId:item.menuId];
+                    break;
+                case 5:
+                    [_twoSubStd setTitleLableTxt:item.title];
+                    [_twoSubStd setTxtId:item.menuId];
+                    break;
+                case 6:
+                    [_Farm_type setTitleLableTxt:item.title];
+                    [_Farm_type setTxtId:item.menuId];
+                    break;
                 default:
                     break;
             }
@@ -562,16 +672,22 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
 
 -(void)initSubRighmenuView{
     if (self.rightSubDevMenu == nil) {
-        
+        CGFloat ScrollHeigh=fDeviceHeight;
         self.rightSubDevMenu = [[UIView alloc]initWithFrame:CGRectMake(fDeviceWidth, 20, fDeviceWidth-_rightOffset, fDeviceHeight - 20)];
         
-        [self.view addSubview:self.rightSubDevMenu];
+        
+        
+        UIScrollView *scollVc=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 50, fDeviceWidth-_rightOffset, fDeviceHeight)];
+       
+        [scollVc setBackgroundColor:[UIColor whiteColor]];
         [self.rightSubDevMenu setBackgroundColor:[UIColor whiteColor]];
+        
         UILabel *topLbl=[[UILabel alloc]initWithFrame:CGRectMake(0, 5, fDeviceWidth-_rightOffset, 40)];
         topLbl.text=@"添加子设备";
         [topLbl setTextAlignment:NSTextAlignmentCenter];
         [topLbl setTextColor:[UIColor blackColor]];
         [self.rightSubDevMenu addSubview:topLbl];
+        
         
         UIImageView *backimg=[[UIImageView alloc]initWithFrame:CGRectMake(8, 12, 24, 24)];
         backimg.image=[UIImage imageNamed:@"leftBack"];
@@ -586,28 +702,33 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
         topSprit.backgroundColor=spritLineColor;
         [self.rightSubDevMenu addSubview:topSprit];
         
-        CGFloat YOffset=65;
+        CGFloat YOffset=10;
         CGFloat editIndex=0;
         CGFloat editHeigh=31;
         
         _DevNameTxt=[[UITextField alloc]initWithFrame:CGRectMake(10, YOffset+editHeigh*editIndex, fDeviceWidth-_rightOffset-20, 30)];
         [self stdInitTxtF:_DevNameTxt hintxt:@"名称"];
         _DevNameTxt.delegate=self;
-        [self.rightSubDevMenu addSubview:_DevNameTxt];
+        [scollVc addSubview:_DevNameTxt];
         
         editIndex+=1;
         YOffset+=15;
-        _oneSubStd=[[stdTextField alloc]initWithFrame:CGRectMake(10, YOffset+editHeigh*editIndex, fDeviceWidth-_rightOffset-20, 30) titletxt:@"厂家" stdImg:@"dropArrow" sendtag:0];
-        [self.rightSubDevMenu addSubview:_oneSubStd];
+        _threeSubStd=[[stdTextField alloc]initWithFrame:CGRectMake(10, YOffset+editHeigh*editIndex, fDeviceWidth-_rightOffset-20, 30) titletxt:@"设备类型" stdImg:@"dropArrow" sendtag:3];
+        [scollVc addSubview:_threeSubStd];
         
         editIndex+=1;
-        _twoSubStd=[[stdTextField alloc]initWithFrame:CGRectMake(10, YOffset+editHeigh*editIndex, fDeviceWidth-_rightOffset-20, 30) titletxt:@"设备型号" stdImg:@"dropArrow" sendtag:1];
-        [self.rightSubDevMenu addSubview:_twoSubStd];
+        _oneSubStd=[[stdTextField alloc]initWithFrame:CGRectMake(10, YOffset+editHeigh*editIndex, fDeviceWidth-_rightOffset-20, 30) titletxt:@"厂家" stdImg:@"dropArrow" sendtag:4];
+        [scollVc addSubview:_oneSubStd];
+        
+        editIndex+=1;
+        _twoSubStd=[[stdTextField alloc]initWithFrame:CGRectMake(10, YOffset+editHeigh*editIndex, fDeviceWidth-_rightOffset-20, 30) titletxt:@"设备型号" stdImg:@"dropArrow" sendtag:5];
+        [scollVc addSubview:_twoSubStd];
         
         
         
         _oneSubStd.stdtxtDelegate=self;
         _twoSubStd.stdtxtDelegate=self;
+        _threeSubStd.stdtxtDelegate=self;
         
         
         editIndex+=1;
@@ -615,73 +736,84 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
         _DevAddrTxt=[[UITextField alloc]initWithFrame:CGRectMake(10, YOffset+editHeigh*editIndex, fDeviceWidth-_rightOffset-20, 30)];
         [self stdInitTxtF:_DevAddrTxt hintxt:@"地址"];
         _DevAddrTxt.delegate=self;
-        [self.rightSubDevMenu addSubview:_DevAddrTxt];
+        [scollVc addSubview:_DevAddrTxt];
         
         editIndex+=1;
         _SubDevIdTxt=[[UITextField alloc]initWithFrame:CGRectMake(10, YOffset+editHeigh*editIndex, fDeviceWidth-_rightOffset-20, 30)];
         [self stdInitTxtF:_SubDevIdTxt hintxt:@"设备ID"];
         _SubDevIdTxt.delegate=self;
-        [self.rightSubDevMenu addSubview:_SubDevIdTxt];
+        [scollVc addSubview:_SubDevIdTxt];
         
         editIndex+=1;
         YOffset+=15;
         _SubDevControl1=[[UITextField alloc]initWithFrame:CGRectMake(10, YOffset+editHeigh*editIndex, fDeviceWidth-_rightOffset-20, 30)];
         [self stdInitTxtF:_SubDevControl1 hintxt:@"控制通道1"];
         _SubDevControl1.delegate=self;
-        [self.rightSubDevMenu addSubview:_SubDevControl1];
+        [scollVc addSubview:_SubDevControl1];
         
         editIndex+=1;
         _SubDevControl2=[[UITextField alloc]initWithFrame:CGRectMake(10, YOffset+editHeigh*editIndex, fDeviceWidth-_rightOffset-20, 30)];
         [self stdInitTxtF:_SubDevControl2 hintxt:@"控制通道2"];
         _SubDevControl2.delegate=self;
-        [self.rightSubDevMenu addSubview:_SubDevControl2];
+        [scollVc addSubview:_SubDevControl2];
         
         editIndex+=1;
         _SubDevControl3=[[UITextField alloc]initWithFrame:CGRectMake(10, YOffset+editHeigh*editIndex, fDeviceWidth-_rightOffset-20, 30)];
         [self stdInitTxtF:_SubDevControl3 hintxt:@"控制通道3"];
         _SubDevControl3.delegate=self;
-        [self.rightSubDevMenu addSubview:_SubDevControl3];
+        [scollVc addSubview:_SubDevControl3];
         
         editIndex+=1;
         _SubDevControl4=[[UITextField alloc]initWithFrame:CGRectMake(10, YOffset+editHeigh*editIndex, fDeviceWidth-_rightOffset-20, 30)];
         [self stdInitTxtF:_SubDevControl4 hintxt:@"控制通道4"];
         _SubDevControl4.delegate=self;
-        [self.rightSubDevMenu addSubview:_SubDevControl4];
+        [scollVc addSubview:_SubDevControl4];
+        
+        editIndex+=1;
+        _SubDevMaxValue=[[UITextField alloc]initWithFrame:CGRectMake(10, YOffset+editHeigh*editIndex, fDeviceWidth-_rightOffset-20, 30)];
+        [self stdInitTxtF:_SubDevMaxValue hintxt:@"最高阀值"];
+        _SubDevMaxValue.delegate=self;
+        [scollVc addSubview:_SubDevMaxValue];
+        
+        editIndex+=1;
+        _SubDevMinValue=[[UITextField alloc]initWithFrame:CGRectMake(10, YOffset+editHeigh*editIndex, fDeviceWidth-_rightOffset-20, 30)];
+        [self stdInitTxtF:_SubDevMinValue hintxt:@"最低阀值"];
+        _SubDevMinValue.delegate=self;
+        [scollVc addSubview:_SubDevMinValue];
         
         
-        editIndex+=2;
+        editIndex+=1;
+        YOffset+=15;
         UIImageView *logobtnImg=[[UIImageView alloc]initWithFrame:CGRectMake(10, YOffset+editHeigh*editIndex, fDeviceWidth-_rightOffset-20, 50)];
         logobtnImg.image=[UIImage imageNamed:@"logBtn"];
-        [self.rightSubDevMenu addSubview:logobtnImg];
+        [scollVc addSubview:logobtnImg];
         
         UIButton* OkBtn=[[UIButton alloc]initWithFrame:CGRectMake(10, YOffset+editHeigh*editIndex-3, fDeviceWidth-_rightOffset-20, 50)];
         
         [OkBtn addTarget:self action:@selector(clickAddToSubTable) forControlEvents:UIControlEventTouchUpInside];
         
         [OkBtn setTitle:@"确  定"forState:UIControlStateNormal];// 添加文字
-        [self.rightSubDevMenu addSubview:OkBtn];
+        [scollVc addSubview:OkBtn];
+        ScrollHeigh=YOffset+editHeigh*editIndex-3+150;
+        [scollVc setContentSize:CGSizeMake(fDeviceWidth, ScrollHeigh)];
+        
+        [self.rightSubDevMenu addSubview:scollVc];
+        [self.view addSubview:self.rightSubDevMenu];
+        
     }
 }
 
 -(void)devSubMenuCilck{
     [self hideRighMenu:_rightSubDevMenu];
 }
--(NSMutableArray*)stdDeepCopyArr:(NSMutableArray*)SrcArr{
-    NSMutableArray *dscArr=[[NSMutableArray alloc]init];
-    for (int i; i<SrcArr.count; i++) {
-        [dscArr addObject:SrcArr[i]];
-        
-    }
-    
-    
-    return dscArr;
 
-}
 
 -(void)clickAddToSubTable{
     deviceInfo *DEV=[[deviceInfo alloc]init];
     DEV.devName=_DevNameTxt.text;
-//    DEV.devTypeId=_oneSubStd.txtId;
+    
+    DEV.devType=_threeSubStd.titleLable.text;
+    DEV.devTypeId=_threeSubStd.txtId;//设备类型
     
     DEV.devFactory=_oneSubStd.titleLable.text;//厂家
     DEV.devFactoryId=_oneSubStd.txtId;
@@ -695,65 +827,95 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
     DEV.controlPip2=_SubDevControl2.text;
     DEV.controlPip3=_SubDevControl3.text;
     DEV.controlPip4=_SubDevControl4.text;
+    DEV.maxLimit=_SubDevMaxValue.text;
+    DEV.minLimit=_SubDevMinValue.text;
     
     if (!_SubTableDataSource) {
         _SubTableDataSource=[[NSMutableArray alloc]init];
     }
-    [_SubTableDataSource addObject:DEV];
+    if (_subDeviceShowType==0) {//新建子设备
+        [_SubTableDataSource addObject:DEV];
+    }
+    else{//编辑子设备
+        [_SubTableDataSource replaceObjectAtIndex:_selectedTableIndex withObject:DEV];
+    }
+    
     [self.SubTableView reloadData];
-    NSUInteger indexI=_TableView.indexPathForSelectedRow.item;//>0?:0;
-    
-   // NSMutableArray *subArr=[self stdDeepCopyArr:_SubTableDataSource];
-   // NSArray* subArr = [NSKeyedUnarchiver unarchiveObjectWithData:
-    //                              [NSKeyedArchiver archivedDataWithRootObject: _SubTableDataSource]];
-    NSMutableArray* subArr=[[NSMutableArray alloc]initWithArray:_SubTableDataSource];
-//    if (_SubDevData.count>indexI) {
-//        [_SubDevData replaceObjectAtIndex:_TableView.indexPathForSelectedRow.item withObject:subArr];
-//    }
-//    else//此设备第一次添加子设备
-//        [_SubDevData addObject:subArr];
-    
-    NSString* subKey=[NSString stringWithFormat:@"%lu",(unsigned long)indexI];
-    [_SubDevDict setObject:subArr forKey:subKey];
+
+    [self setSubDevDictFromArr];
     [self hideRighMenu:self.rightSubDevMenu];
     
+}
+-(void)setSubDevDictFromArr{
+    NSUInteger indexI=_TableView.indexPathForSelectedRow.item;
+    deviceInfo * dev=_tableDataSource[indexI];
+    
+    NSMutableArray* subArr=[[NSMutableArray alloc]initWithArray:_SubTableDataSource];
+    [_SubDevDict setObject:subArr forKey:dev.devId];
 }
 -(NSDictionary *)makeUpLoadDict{
     NSMutableDictionary * dict=[[NSMutableDictionary alloc]init];
    
     [dict setObject:_FarmName.text forKey:@"farmName"];
-    [dict setObject:_Farm_type.text forKey:@"farmType"];
+    [dict setObject:_Farm_type.txtId forKey:@"farmTypeId"];
+    [dict setObject:@"1" forKey:@"userId"];
+    [dict setObject:@"" forKey:@"farmId"];
     NSMutableArray *devList=[[NSMutableArray alloc]init];
     
-    int i=0;
+    
     for (deviceInfo *dev in _tableDataSource) {
         NSMutableArray *subDevList=[[NSMutableArray alloc]init];
         NSMutableArray *equipmentSub=[[NSMutableArray alloc]init];
-        NSString *keyStr=[NSString stringWithFormat:@"%d",i];
-        i++;
+        NSString *keyStr=dev.devId;
+        
         subDevList=[_SubDevDict objectForKey:keyStr];
         
-         for (deviceInfo *subDev in subDevList)
+         for (deviceInfo *subDev in subDevList)//子设备
          {
+             if (subDev.maxLimit.length<1) {
+                 subDev.maxLimit=@"null";
+             }
+             if (subDev.minLimit.length<1) {
+                 subDev.minLimit=@"null";
+             }
+             if (subDev.controlPip1.length<1) {
+                 subDev.controlPip1=@"null";
+             }
+             if (subDev.controlPip2.length<1) {
+                 subDev.controlPip2=@"null";
+             }
+             if (subDev.controlPip3.length<1) {
+                 subDev.controlPip3=@"null";
+             }
+             if (subDev.controlPip4.length<1) {
+                 subDev.controlPip4=@"null";
+             }
              NSMutableDictionary * subDict=[NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                        @"",@"equipmentId",
                                         subDev.devName,@"equipmentName",
                                           subDev.devNo,@"equipmentNo",
-                                          subDev.devTypeId,@"equipmentType",
                                           subDev.devFactoryId,@"equipmentFactoryId",
-                                          subDev.devVersion,@"equipmentModelId",
+                                          subDev.devVersionId,@"equipmentModelId",
+                                            subDev.devTypeId,@"equipmentType",
                                             subDev.controlPip1,@"controlChannelOne",
                                             subDev.controlPip2,@"controlChannelTwo",
                                             subDev.controlPip3,@"controlChannelThree",
                                             subDev.controlPip4,@"controlChannelFour",
+                                            subDev.maxLimit,@"referenceUpLimit",
+                                            subDev.minLimit,@"referenceDownLimit",
+                                            subDev.devAddr,@"equipmentAddr",
+                                            
                                           nil];
              [equipmentSub addObject:subDict];
          }
              
-        NSMutableDictionary * pDict=[NSMutableDictionary dictionaryWithObjectsAndKeys:dev.devName,@"equipmentName",
+        NSMutableDictionary * pDict=[NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                     @"",@"equipmentId",
+                                     dev.devName,@"equipmentName",
                                      dev.devNo,@"equipmentNo",
                                      dev.devTypeId,@"equipmentType",
                                      dev.devFactoryId,@"equipmentFactoryId",
-                                     dev.devVersion,@"equipmentModelId",
+                                     dev.devVersionId,@"equipmentModelId",
                                      equipmentSub,@"equipmentSub",
                                      nil];
         [devList addObject:pDict];
@@ -778,16 +940,24 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
     
 }
 
-//登录
--(void)loginNetFuc:(NSString*)usr passWord:(NSString*)psw{
+
+//上报
+-(void)addFarmToSrvFuc{
     [SVProgressHUD showWithStatus:k_Status_Load];
-    //http://192.168.0.21:8080/propies/login/user?userLogin=admin&userPwd=aaaaaa
-//    NSDictionary *paramDict = @{
-//                                @"ut":@"indexVilliageGoods",
-//                                };
+   
+
+    
     NSDictionary *paramDict =[self makeUpLoadDict];
-    NSString *urlstr=[NSString stringWithFormat:@"%@%@",BaseUrl,@"propies/login/user?userLogin="];
-    urlstr = [urlstr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+
+    NSString *urlstr=[NSString stringWithFormat:@"%@%@",BaseUrl,@"Former/farm/farmAdd"];
+    
+    
+    NSLog(@"addFarmToSrvFuc:%@",urlstr);
+    // 设置请求格式
+    ApplicationDelegate.httpManager.requestSerializer = [AFJSONRequestSerializer serializer];
+    // 设置返回格式
+    ApplicationDelegate.httpManager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
     [ApplicationDelegate.httpManager POST:urlstr
                                parameters:paramDict
                                  progress:^(NSProgress * _Nonnull uploadProgress) {}
@@ -803,7 +973,7 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
                                           NSString *suc=[jsonDic objectForKey:@"msg"];
                                           
                                           //
-                                          if ([suc isEqualToString:@"登陆成功"]) {
+                                          if ([suc isEqualToString:@"success"]) {
                                               //成功
                                               
                                               [SVProgressHUD dismiss];
@@ -821,8 +991,148 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
                                       
                                   } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
                                       //请求异常
+                                      NSLog(@"error:%@",error);
                                       [SVProgressHUD showErrorWithStatus:k_Error_Network];
                             }];
     
+}
+
+//获取数据类型
+-(void)getDataType:(NSInteger)typyNum popRect:(CGRect)rectTmp{
+    [SVProgressHUD showWithStatus:k_Status_Load];
+
+    NSString *urlstr=@"";
+    
+    switch (typyNum) {
+        case 0://设备类型
+            urlstr=[NSString stringWithFormat:@"%@%@",BaseUrl,@"Former/equipment/equipmentType"];
+            break;
+        case 1://厂家
+            urlstr=[NSString stringWithFormat:@"%@%@",BaseUrl,@"Former/equipment/equipmentFactory?equipmentType=1"];
+            break;
+        case 2://设备型号
+            urlstr=[NSString stringWithFormat:@"%@%@",BaseUrl,@"Former/equipment/equipmentModel?equipmentFactory=1"];
+            break;
+            
+        case 3://设备类型
+            urlstr=[NSString stringWithFormat:@"%@%@",BaseUrl,@"Former/equipment/equipmentType"];
+            break;
+         
+        case 4://厂家
+            urlstr=[NSString stringWithFormat:@"%@%@",BaseUrl,@"Former/equipment/equipmentFactory?equipmentType=1"];
+            break;
+            
+        case 5://设备型号
+            urlstr=[NSString stringWithFormat:@"%@%@",BaseUrl,@"Former/equipment/equipmentModel?equipmentFactory=1"];
+            break;
+        case 6://获取种植类型
+             urlstr=[NSString stringWithFormat:@"%@%@",BaseUrl,@"Former/farm/farmType"];
+            break;
+            
+        default:
+            break;
+    }
+    NSLog(@"urlstr:%@",urlstr);
+    [ApplicationDelegate.httpManager POST:urlstr
+                               parameters:nil
+                                 progress:^(NSProgress * _Nonnull uploadProgress) {}
+                                  success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                                      //http请求状态
+                                      if (task.state == NSURLSessionTaskStateCompleted) {
+                                          NSError* error;
+                                          NSDictionary* jsonDic = [NSJSONSerialization
+                                                                   JSONObjectWithData:responseObject
+                                                                   options:kNilOptions
+                                                                   error:&error];
+                                          //NSLog(@"数据：%@",jsonDic);
+                                          NSString *suc=[jsonDic objectForKey:@"msg"];
+                                          
+                                          //
+                                          if ([suc isEqualToString:@"success"]) {
+                                              //成功
+                                              [SVProgressHUD dismiss];
+                                              
+                                              [self drawDropDownList:rectTmp.origin.x+rectTmp.size.width/2
+                                                ListY:rectTmp.origin.y+rectTmp.size.height
+                                                itemWidth:rectTmp.size.width
+                                                items:[self praseTypeData:jsonDic TypeNum:typyNum]
+                                                drawSender:typyNum];
+                                              
+                                          } else {
+                                              //失败
+                                              [SVProgressHUD showErrorWithStatus:suc];
+                                          }
+                                          
+                                      } else {
+                                          [SVProgressHUD showErrorWithStatus:k_Error_Network];
+                                          
+                                      }
+                                      
+                                  } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                                      //请求异常
+                                      NSLog(@"error:%@",error);
+                                      [SVProgressHUD showErrorWithStatus:k_Error_Network];
+                                  }];
+    
+}
+
+-(NSMutableArray*)praseTypeData:(NSDictionary*)jDict TypeNum:(NSInteger)Tnum{
+    NSMutableArray *arrRt=[[NSMutableArray alloc]init];
+    NSMutableArray * arr=[jDict objectForKey:@"data"];
+    NSInteger i=0;
+    switch (Tnum) {
+        case 0:
+        case 3:
+            for (NSDictionary*dict in arr) {
+                i++;
+                [arrRt addObject:[YCXMenuItem menuItem:[dict objectForKey:@"equipmentTypeName"]
+                                                 image:nil
+                                                   tag:100+i
+                                              userInfo:@{@"title":@"Menu"}
+                                                menuId:[[dict objectForKey:@"equipmentType"]stringValue]]];
+            }
+
+            break;
+        case 1:
+        case 4:
+            for (NSDictionary*dict in arr) {
+                i++;
+                [arrRt addObject:[YCXMenuItem menuItem:[dict objectForKey:@"equipmentFactoryName"]
+                                                 image:nil
+                                                   tag:100+i
+                                              userInfo:@{@"title":@"Menu"}
+                                                menuId:[[dict objectForKey:@"equipmentFactoryId"]stringValue]]];
+            }
+            
+            break;
+        case 2:
+        case 5:
+            for (NSDictionary*dict in arr) {
+                i++;
+                [arrRt addObject:[YCXMenuItem menuItem:[dict objectForKey:@"equipmentModelName"]
+                                                 image:nil
+                                                   tag:100+i
+                                              userInfo:@{@"title":@"Menu"}
+                                                menuId:[[dict objectForKey:@"equipmentModelId"]stringValue]]];
+            }
+            
+            break;
+        
+        case 6:
+            for (NSDictionary*dict in arr) {
+                i++;
+                [arrRt addObject:[YCXMenuItem menuItem:[dict objectForKey:@"typeName"]
+                                                 image:nil
+                                                   tag:100+i
+                                              userInfo:@{@"title":@"Menu"}
+                                                menuId:[[dict objectForKey:@"farmTypeId"]stringValue]]];
+            }
+            
+            break;
+        default:
+            break;
+    }
+        return arrRt;
+
 }
 @end
