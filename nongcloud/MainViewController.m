@@ -24,6 +24,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _pageindex=1;
     [self loadTopStaus];
     [self loadTopImg];
     [self loadBottomView];
@@ -69,15 +70,15 @@
         LoginViewController *vc = [[LoginViewController alloc]init];
         vc.loginSuccBlock = ^(LoginViewController *aqrvc){
             NSLog(@"login_suc");
-            [self loadCollectionViewData:0];
-            //[self loadTableData:ApplicationDelegate.myLoginInfo.communityId  pageNo:1];
+            ApplicationDelegate.isLogin = YES;
+            //[self loadCollectionViewData:_pageindex];
         };
         self.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:NO];
         self.hidesBottomBarWhenPushed = NO;
     }
     else
-        [self loadCollectionViewData:0];
+       [self loadCollectionViewData:_pageindex];
     
 }
 
@@ -96,10 +97,6 @@
     
     [self.collectionView registerClass:[MainCollectionViewCell class]  forCellWithReuseIdentifier:@"CollectionCell"];
 
-    //[self setHomeLastUpdateTime];
-    
-//    _pageindex=1;
-//    [self loadCollectionViewData:_pageindex];
     
     // 下拉刷新
     __unsafe_unretained __typeof(self) weakSelf = self;
@@ -147,12 +144,6 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     farmModel * FM=_dataSource[indexPath.item];
     if ([FM.farmId isEqualToString:@"-1"]) {
-//        farmModel *addFm=[[farmModel alloc]init];
-//        addFm.farmImg=@"home_selected";
-//        addFm.farmId=[NSString stringWithFormat:@"%lu",_dataSource.count-1];
-//        addFm.farmName=[NSString stringWithFormat:@"%@%lu",@"农场",_dataSource.count-1];
-//        [_dataSource insertObject:addFm atIndex:_dataSource.count-1];
-//        [self.collectionView reloadData];
         [self pushAddFarmView];
     }
     else

@@ -20,7 +20,7 @@
 @property(nonatomic,copy)NSString *deleteState;//农场删除状态 0删除 1正常
 @property(nonatomic,copy)NSString *farmTypeId;//农场类型 蔬菜 水果等
 @property(nonatomic,copy)NSString *userId;//农场类型 蔬菜 水果等
-
+@property(nonatomic,copy)NSString *farmTypeName;//农场类型 蔬菜 水果等
 - (NSMutableArray *)asignInfoWithDict:(NSDictionary *)dict;
 
 @end

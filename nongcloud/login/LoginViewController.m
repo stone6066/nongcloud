@@ -91,7 +91,6 @@
 }
 
 -(void)loginSuccPro{
-    ApplicationDelegate.isLogin = YES;
     [self.navigationController popViewControllerAnimated:NO];
     if(self.loginSuccBlock)
         self.loginSuccBlock(self);

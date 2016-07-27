@@ -22,10 +22,10 @@
 - (NSMutableArray *)asignInfoWithDict:(NSDictionary *)dict{
     NSMutableArray *arr = [[NSMutableArray alloc]init];
     NSArray *dictArray = [dict objectForKey:@"data"];
-    farmModel *FmInfo=[[farmModel alloc]init];
+    
     
     for (NSDictionary *dicttmp in dictArray) {
-        
+        farmModel *FmInfo=[[farmModel alloc]init];
         FmInfo.farmImg=@"farmImg";
         FmInfo.farmId=[[dicttmp objectForKey:@"farmId"]stringValue];
         FmInfo.userId=[[dicttmp objectForKey:@"userId"]stringValue];

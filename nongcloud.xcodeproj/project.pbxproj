@@ -10,6 +10,13 @@
 		65A9E4BA44E99524C1C1ED9D /* Pods_nongcloud.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF7FA19FF8F0F19D59663914 /* Pods_nongcloud.framework */; };
 		89012BDF1D378658000470EA /* farmModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 89012BDE1D378658000470EA /* farmModel.m */; };
 		890908931D38613E005B8004 /* MainCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 890908921D38613E005B8004 /* MainCollectionViewCell.m */; };
+		89226DBB1D4844220062C79C /* AlertFarmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89226DBA1D4844220062C79C /* AlertFarmViewController.m */; };
+		89226DBF1D48527F0062C79C /* alter.png in Resources */ = {isa = PBXBuildFile; fileRef = 89226DBC1D48527F0062C79C /* alter.png */; };
+		89226DC01D48527F0062C79C /* alter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89226DBD1D48527F0062C79C /* alter@2x.png */; };
+		89226DC11D48527F0062C79C /* alter@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89226DBE1D48527F0062C79C /* alter@3x.png */; };
+		89226DC51D488AE10062C79C /* save.png in Resources */ = {isa = PBXBuildFile; fileRef = 89226DC21D488AE10062C79C /* save.png */; };
+		89226DC61D488AE10062C79C /* save@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89226DC31D488AE10062C79C /* save@2x.png */; };
+		89226DC71D488AE10062C79C /* save@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89226DC41D488AE10062C79C /* save@3x.png */; };
 		892DB2231D36079000B182B6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 892DB2221D36079000B182B6 /* main.m */; };
 		892DB2261D36079000B182B6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 892DB2251D36079000B182B6 /* AppDelegate.m */; };
 		892DB22F1D36079000B182B6 /* nongcloud.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 892DB22D1D36079000B182B6 /* nongcloud.xcdatamodeld */; };
@@ -213,6 +220,14 @@
 		89012BDE1D378658000470EA /* farmModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = farmModel.m; sourceTree = "<group>"; };
 		890908911D38613E005B8004 /* MainCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainCollectionViewCell.h; sourceTree = "<group>"; };
 		890908921D38613E005B8004 /* MainCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainCollectionViewCell.m; sourceTree = "<group>"; };
+		89226DB91D4844220062C79C /* AlertFarmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertFarmViewController.h; sourceTree = "<group>"; };
+		89226DBA1D4844220062C79C /* AlertFarmViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertFarmViewController.m; sourceTree = "<group>"; };
+		89226DBC1D48527F0062C79C /* alter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alter.png; sourceTree = "<group>"; };
+		89226DBD1D48527F0062C79C /* alter@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alter@2x.png"; sourceTree = "<group>"; };
+		89226DBE1D48527F0062C79C /* alter@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alter@3x.png"; sourceTree = "<group>"; };
+		89226DC21D488AE10062C79C /* save.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = save.png; sourceTree = "<group>"; };
+		89226DC31D488AE10062C79C /* save@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "save@2x.png"; sourceTree = "<group>"; };
+		89226DC41D488AE10062C79C /* save@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "save@3x.png"; sourceTree = "<group>"; };
 		892DB21E1D36079000B182B6 /* nongcloud.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nongcloud.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		892DB2221D36079000B182B6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		892DB2241D36079000B182B6 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -553,6 +568,8 @@
 				892DCB511D3C78E90058826A /* AddFarmViewController.m */,
 				892DCB601D3CAA850058826A /* AddDevViewController.h */,
 				892DCB611D3CAA850058826A /* AddDevViewController.m */,
+				89226DB91D4844220062C79C /* AlertFarmViewController.h */,
+				89226DBA1D4844220062C79C /* AlertFarmViewController.m */,
 			);
 			path = farm;
 			sourceTree = "<group>";
@@ -578,6 +595,12 @@
 		892DCB631D3CC5340058826A /* myicon */ = {
 			isa = PBXGroup;
 			children = (
+				89226DC21D488AE10062C79C /* save.png */,
+				89226DC31D488AE10062C79C /* save@2x.png */,
+				89226DC41D488AE10062C79C /* save@3x.png */,
+				89226DBC1D48527F0062C79C /* alter.png */,
+				89226DBD1D48527F0062C79C /* alter@2x.png */,
+				89226DBE1D48527F0062C79C /* alter@3x.png */,
 				89E942861D3E184C00AB04E8 /* homeTopImg.png */,
 				89E942871D3E184C00AB04E8 /* homeTopImg@2x.png */,
 				89E942881D3E184C00AB04E8 /* homeTopImg@3x.png */,
@@ -931,12 +954,15 @@
 				89C47F631D3780EB003AC1B1 /* notice@3x.png in Resources */,
 				89C47F2B1D3780EB003AC1B1 /* bianhao.png in Resources */,
 				89C47F671D3780EB003AC1B1 /* noticeList.png in Resources */,
+				89226DC71D488AE10062C79C /* save@3x.png in Resources */,
 				89C47F9A1D3780EB003AC1B1 /* zhiye.png in Resources */,
 				89C47F171D3780EB003AC1B1 /* about@3x.png in Resources */,
 				89C47F421D3780EB003AC1B1 /* gongzhong@3x.png in Resources */,
 				89C47F8F1D3780EB003AC1B1 /* wynotice@2x.png in Resources */,
 				89E942771D3E07E700AB04E8 /* farmImg.png in Resources */,
+				89226DC01D48527F0062C79C /* alter@2x.png in Resources */,
 				89C47F931D3780EB003AC1B1 /* ydbs@3x.png in Resources */,
+				89226DC61D488AE10062C79C /* save@2x.png in Resources */,
 				89C47F9C1D3780EB003AC1B1 /* zhiye@3x.png in Resources */,
 				89C47F901D3780EB003AC1B1 /* wynotice@3x.png in Resources */,
 				89C47F9E1D3780EB003AC1B1 /* 地址图标1@2x.png in Resources */,
@@ -953,10 +979,12 @@
 				89C47F641D3780EB003AC1B1 /* notice_selected.png in Resources */,
 				89E9427F1D3E11D100AB04E8 /* homeBottom@3x.png in Resources */,
 				89C47F651D3780EB003AC1B1 /* notice_selected@2x.png in Resources */,
+				89226DBF1D48527F0062C79C /* alter.png in Resources */,
 				892DCB681D3CC5340058826A /* leftBack@2x.png in Resources */,
 				89C47F6B1D3780EB003AC1B1 /* personInfo@2x.png in Resources */,
 				89C47F831D3780EB003AC1B1 /* timeIcon@2x.png in Resources */,
 				89C47F881D3780EB003AC1B1 /* usrlevel.png in Resources */,
+				89226DC51D488AE10062C79C /* save.png in Resources */,
 				89C47F5B1D3780EB003AC1B1 /* name.png in Resources */,
 				89C47F771D3780EB003AC1B1 /* setting_selected@2x.png in Resources */,
 				89C47F301D3780EB003AC1B1 /* checkContent@3x.png in Resources */,
@@ -1032,6 +1060,7 @@
 				89C47F3E1D3780EB003AC1B1 /* flowTitle@2x.png in Resources */,
 				89C47F521D3780EB003AC1B1 /* logBtn.png in Resources */,
 				89C47F2D1D3780EB003AC1B1 /* bianhao@3x.png in Resources */,
+				89226DC11D48527F0062C79C /* alter@3x.png in Resources */,
 				89C47F6F1D3780EB003AC1B1 /* remark@3x.png in Resources */,
 				89C47F2F1D3780EB003AC1B1 /* checkContent@2x.png in Resources */,
 				89C47F311D3780EB003AC1B1 /* checkPoint.png in Resources */,
@@ -1148,6 +1177,7 @@
 				89C47E741D377CF7003AC1B1 /* LoginViewController.m in Sources */,
 				890908931D38613E005B8004 /* MainCollectionViewCell.m in Sources */,
 				892DCB4E1D3C78D10058826A /* FarmDetailViewController.m in Sources */,
+				89226DBB1D4844220062C79C /* AlertFarmViewController.m in Sources */,
 				892DCB5F1D3C9DA00058826A /* ListTableViewCell.m in Sources */,
 				892DCB581D3C7ADA0058826A /* YCXMenu.m in Sources */,
 				892DCB621D3CAA850058826A /* AddDevViewController.m in Sources */,
