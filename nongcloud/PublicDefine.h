@@ -73,6 +73,11 @@
 #define ApplicationDelegate ((AppDelegate *)[[UIApplication sharedApplication] delegate])
 
 /*
+ * 文件、目录
+ */
+#define DocumentBasePath ((NSString *)[(NSArray *)NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)  objectAtIndex:0])
+
+/*
  *常用网络状态
  */
 #define k_Status_Load                @"加载中..."

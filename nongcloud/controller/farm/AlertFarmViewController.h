@@ -47,8 +47,9 @@
 @property(nonatomic,strong)UITextField *SubDevMinValue;//添加子设备-最低阀值
 @property(nonatomic,assign)NSInteger deviceShowType;//设备编辑类型 0新建 1编辑
 @property(nonatomic,assign)NSInteger subDeviceShowType;//设备编辑类型 0新建 1编辑
-@property(nonatomic,assign)NSInteger selectedTableIndex;//设备编辑类型 0新建 1编辑
+@property(nonatomic,assign)NSInteger selectedTableIndex;//设备列表选中的index
 
 @property(nonatomic,copy)NSString *farmId;//农场id
 @property(nonatomic,copy)NSString *subDevId;//子设备id
+@property(nonatomic,copy)NSString *parentDevId;//设备id
 @end

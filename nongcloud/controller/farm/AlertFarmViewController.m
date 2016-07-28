@@ -278,8 +278,28 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
     [UpInfoBtn setTitle:@"删除该农场"forState:UIControlStateNormal];// 添加文字
 }
 -(void)clickUpinfo{
+    NSString *title = NSLocalizedString(@"提示", nil);
+    NSString *message = NSLocalizedString(@"是否删除此设备？", nil);
+    NSString *cancelButtonTitle = NSLocalizedString(@"否", nil);
+    NSString *otherButtonTitle = NSLocalizedString(@"是", nil);
     
-    [self deleteFarmFromSrv];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    // Create the actions.
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        NSLog(@"The \"Okay/Cancel\" alert's cancel action occured.");
+    }];
+    
+    UIAlertAction *otherAction = [UIAlertAction actionWithTitle:otherButtonTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+         [self deleteFarmFromSrv];
+            }];
+    
+    // Add the actions.
+    [alertController addAction:cancelAction];
+    [alertController addAction:otherAction];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+   
    
     
 }
@@ -364,22 +384,9 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
     
     
     if (_deviceShowType==0) {//新建设备
-        if (_tableDataSource.count>0) {//新加的id比数组最后一个id大1
-            deviceInfo *devtmp=_tableDataSource[_tableDataSource.count-1];
-            NSString* idtmp= devtmp.devId;
-            NSInteger ii=[idtmp integerValue];
-            ii+=1;
-            idtmp=[NSString stringWithFormat:@"%lu",(unsigned long)ii];
-            DEV.devId=idtmp;
-            
-        }
-        else
-            DEV.devId=@"1";
-        [_tableDataSource addObject:DEV];
-        [_tableDataSource replaceObjectAtIndex:_selectedTableIndex withObject:DEV];
-        [self.TableView reloadData];
+        [self addDevinfoTovr:DEV updateType:0];
         
-        [self hideRighMenu:self.rightDevMenu];
+        //[self hideRighMenu:self.rightDevMenu];
     }
     else{//编辑设备
         deviceInfo *devtmp=_tableDataSource[_selectedTableIndex];
@@ -387,10 +394,23 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
         [self updateDevinfoTovr:DEV updateType:0];
         
     }
+}
+//向本地设备表中添加数据
+-(void)insertTolocalDataSource:(deviceInfo*)dev{
+    if (_tableDataSource.count>0) {//新加的id比数组最后一个id大1
+        deviceInfo *devtmp=_tableDataSource[_tableDataSource.count-1];
+        NSString* idtmp= devtmp.devId;
+        NSInteger ii=[idtmp integerValue];
+        ii+=1;
+        idtmp=[NSString stringWithFormat:@"%lu",(unsigned long)ii];
+        dev.devId=idtmp;
+        
+    }
+    else
+        dev.devId=@"1";
+    [_tableDataSource addObject:dev];
     
-    
-    
-    
+
 }
 -(void)TextFieldDelegate:(UIButton*)sender{
     
@@ -443,25 +463,42 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
 -(NSArray* )tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewRowAction *deleteRoWAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"删除" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {//title可自已定义
-        if (tableView.tag==0) {
-            
-            deviceInfo *dev=_tableDataSource[indexPath.item];
-            NSString *keystr=dev.devId;
-            [_SubDevDict removeObjectForKey:keystr];//删除对应的子设备
-            
-            [_tableDataSource removeObjectAtIndex:indexPath.item];//删除设备
-            _SubTableDataSource=nil;
-            
-            [_SubTableView reloadData];
-            
-            
-        }
-        else
-        {
-            [_SubTableDataSource removeObjectAtIndex:indexPath.item];
-            [self setSubDevDictFromArr];
-        }
-        [tableView reloadData];
+        
+        NSString *title = NSLocalizedString(@"提示", nil);
+        NSString *message = NSLocalizedString(@"是否删除此设备？", nil);
+        NSString *cancelButtonTitle = NSLocalizedString(@"否", nil);
+        NSString *otherButtonTitle = NSLocalizedString(@"是", nil);
+        
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+        
+        // Create the actions.
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cancelButtonTitle style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            NSLog(@"The \"Okay/Cancel\" alert's cancel action occured.");
+        }];
+        
+        UIAlertAction *otherAction = [UIAlertAction actionWithTitle:otherButtonTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            if (tableView.tag==0) {
+                deviceInfo *dev=_tableDataSource[indexPath.item];
+                [self deleteDevinfoFromSvr:dev.devId];
+                
+            }
+            else
+            {
+                deviceInfo *dev=_SubTableDataSource[indexPath.item];
+                [self deleteDevinfoFromSvr:dev.devId];
+            }
+        }];
+        
+        // Add the actions.
+        [alertController addAction:cancelAction];
+        [alertController addAction:otherAction];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
+        
+        
+        
+        
+       
     }];//此处是iOS8.0以后苹果最新推出的api，UITableViewRowAction，Style是划出的标签颜色等状态的定义，这里也可自行定义
     
     UITableViewRowAction *editRowAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"编辑" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
@@ -522,7 +559,9 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
     _selectedTableIndex=indexPath.item;
     if (tableView.tag==0)
     {
+        
         deviceInfo *dev=_tableDataSource[indexPath.item];
+        _parentDevId=dev.devId;
         _SubTableDataSource=[_SubDevDict objectForKey:dev.devId];
         [_SubTableView reloadData];
         
@@ -758,11 +797,12 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
         _SubTableDataSource=[[NSMutableArray alloc]init];
     }
     if (_subDeviceShowType==0) {//新建子设备
-        [_SubTableDataSource addObject:DEV];
-        [self.SubTableView reloadData];
-        
-        [self setSubDevDictFromArr];
-        [self hideRighMenu:self.rightSubDevMenu];
+//        [_SubTableDataSource addObject:DEV];
+//        [self.SubTableView reloadData];
+//        
+//        [self setSubDevDictFromArr];
+//        [self hideRighMenu:self.rightSubDevMenu];
+        [self addDevinfoTovr:DEV updateType:1];
     }
     else{//编辑子设备
         DEV.devId=_subDevId;
@@ -992,6 +1032,7 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
     }
  
     _tableDataSource=[allDataDict objectForKey:@"devinfo"];
+    
     [self.TableView reloadData];
     //设备列表数据
     
@@ -999,13 +1040,14 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
     //所有子设备
     if (_tableDataSource.count>0) {
         dev=_tableDataSource[0];//子设备字典key
+        _parentDevId=dev.devId;//默认父设备id
         //子设备列表默认显示第一个设备的子设备
         _SubTableDataSource=[_SubDevDict objectForKey:dev.devId];
         [self.SubTableView reloadData];
     }
 
 }
-//获取数据类型
+
 //获取数据类型
 -(void)getDataType:(NSInteger)typyNum popRect:(CGRect)rectTmp{
     [SVProgressHUD showWithStatus:k_Status_Load];
@@ -1176,7 +1218,7 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
                                           NSString *suc=[jsonDic objectForKey:@"msg"];
                                           
                                           //
-                                          if ([suc isEqualToString:@"删除农场成功"]) {
+                                          if ([suc isEqualToString:@"success"]) {
                                               //成功
                                               
                                               
@@ -1317,6 +1359,12 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
         dev.devVersion=[devDict objectForKey:@"equipmentModelName"];
         dev.devVersionId=[[devDict objectForKey:@"equipmentModelId"]stringValue];
         
+        
+        if(![[devDict objectForKey:@"equipmentAddr"] isEqual:[NSNull null]])
+            dev.devAddr=[devDict objectForKey:@"equipmentAddr"];
+        else
+            dev.devAddr=@"";
+        
         if(![[devDict objectForKey:@"controlChannelOne"] isEqual:[NSNull null]])
             dev.controlPip1=[devDict objectForKey:@"controlChannelOne"];
         else
@@ -1385,7 +1433,7 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
 //itype=0 设备、1子设备
 -(void)updateDevinfoTovr:(deviceInfo*)dev updateType:(NSInteger)itype{
     [SVProgressHUD showWithStatus:k_Status_Load];
-    //http://192.168.0.211:8081/Former/equipment/equipmentUpdate?equipmentId=29&equipmentName=修改名称//&equipmentAddr=修改地址&controlChannelThree=修改通道
+
     NSString *urlstr=[NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@",BaseUrl,@"Former/equipment/equipmentUpdate?equipmentId=",dev.devId,
                       @"&equipmentName=",dev.devName,
                       @"&equipmentType=",dev.devTypeId,
@@ -1426,18 +1474,15 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
  
                                               [SVProgressHUD dismiss];
                                               [stdPubFunc stdShowMessage:@"保存成功"];
+                                              
+                                              [self getFarmFromSrv];
                                               if (itype==0) {
-                                                  [_tableDataSource replaceObjectAtIndex:_selectedTableIndex withObject:dev];
+                                                 
                                                   [self hideRighMenu:self.rightDevMenu];
-                                                  [self.TableView reloadData];
+                                                  
                                               }
                                               else{
-
-                                                  [_SubTableDataSource replaceObjectAtIndex:_selectedTableIndex withObject:dev];
-                                                  [self.SubTableView reloadData];
-                                                  
-                                                  [self setSubDevDictFromArr];
-                                                  [self hideRighMenu:self.rightSubDevMenu];
+                                                [self hideRighMenu:self.rightSubDevMenu];
                                               }
                                               
                                           } else {
@@ -1457,4 +1502,148 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
                                   }];
     
 }
+
+//itype=0 设备、1子设备
+-(void)addDevinfoTovr:(deviceInfo*)dev updateType:(NSInteger)itype{
+    [SVProgressHUD showWithStatus:k_Status_Load];
+
+    NSString *urlstr=@"";
+    if (itype==0) {
+        urlstr=[NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@",BaseUrl,@"Former/equipment/equipAdd?farmId=",_farmId,
+                @"&equipmentName=",dev.devName,
+                @"&equipmentType=",dev.devTypeId,
+                @"&equipmentNo=",dev.devNo,
+                @"&equipmentFactoryId=",dev.devFactoryId,
+                @"&equipmentModelId=",dev.devVersionId,
+                @"&equipmentAddr=",(dev.devAddr==nil)?@"null":dev.devAddr,
+                
+                @"&controlChannelOne=",(dev.controlPip1==nil)?@"null":dev.controlPip1,
+                @"&controlChannelTwo=",(dev.controlPip2==nil)?@"null":dev.controlPip2,
+                @"&controlChannelThree=",(dev.controlPip3==nil)?@"null":dev.controlPip3,
+                @"&controlChannelFour=",(dev.controlPip4==nil)?@"null":dev.controlPip4,
+                
+                @"&referenceUpLimit=",(dev.maxLimit==nil)?@"0":dev.maxLimit,
+                @"&referenceDownLimit=",(dev.minLimit==nil)?@"0":dev.minLimit
+                ];
+    }
+    else{
+        urlstr=[NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@%@",BaseUrl,@"Former/equipment/equipSubAdd?farmId=",_farmId,
+                @"&equipmentParentId=",_parentDevId,
+                @"&equipmentName=",dev.devName,
+                @"&equipmentType=",dev.devTypeId,
+                @"&equipmentNo=",dev.devNo,
+                @"&equipmentFactoryId=",dev.devFactoryId,
+                @"&equipmentModelId=",dev.devVersionId,
+                @"&equipmentAddr=",(dev.devAddr==nil)?@"null":dev.devAddr,
+                
+                @"&controlChannelOne=",(dev.controlPip1==nil)?@"null":dev.controlPip1,
+                @"&controlChannelTwo=",(dev.controlPip2==nil)?@"null":dev.controlPip2,
+                @"&controlChannelThree=",(dev.controlPip3==nil)?@"null":dev.controlPip3,
+                @"&controlChannelFour=",(dev.controlPip4==nil)?@"null":dev.controlPip4,
+                
+                @"&referenceUpLimit=",(dev.maxLimit==nil)?@"0":dev.maxLimit,
+                @"&referenceDownLimit=",(dev.minLimit==nil)?@"0":dev.minLimit
+                ];
+
+    }
+    
+    //NSLog(@"updateFarmToSrvFuc:%@",urlstr);
+    urlstr = [urlstr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    NSLog(@"updateFarmToSrvFuc:%@",urlstr);
+    [ApplicationDelegate.httpManager POST:urlstr
+                               parameters:nil
+                                 progress:^(NSProgress * _Nonnull uploadProgress) {}
+                                  success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                                      //http请求状态
+                                      if (task.state == NSURLSessionTaskStateCompleted) {
+                                          NSError* error;
+                                          NSDictionary* jsonDic = [NSJSONSerialization
+                                                                   JSONObjectWithData:responseObject
+                                                                   options:kNilOptions
+                                                                   error:&error];
+                                          //NSLog(@"数据：%@",jsonDic);
+                                          NSString *suc=[jsonDic objectForKey:@"msg"];
+                                          
+                                          //
+                                          if ([suc isEqualToString:@"success"]) {
+                                              //成功
+                                              
+                                              [SVProgressHUD dismiss];
+                                              [stdPubFunc stdShowMessage:@"保存成功"];
+                                              if (itype==0) {
+                                                  [self hideRighMenu:self.rightDevMenu];
+                                              }
+                                              else{
+                                                  
+                                                  [self hideRighMenu:self.rightSubDevMenu];
+                                              }
+                                              [self getFarmFromSrv];//刷新农场
+                                          } else {
+                                              //失败
+                                              [SVProgressHUD showErrorWithStatus:suc];
+                                          }
+                                          
+                                      } else {
+                                          [SVProgressHUD showErrorWithStatus:k_Error_Network];
+                                          
+                                      }
+                                      
+                                  } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                                      //请求异常
+                                      NSLog(@"error:%@",error);
+                                      [SVProgressHUD showErrorWithStatus:k_Error_Network];
+                                  }];
+    
+}
+
+
+//itype=0 设备、1子设备
+-(void)deleteDevinfoFromSvr:(NSString*)devid{
+    [SVProgressHUD showWithStatus:k_Status_Load];
+    
+    NSString *urlstr=[NSString stringWithFormat:@"%@%@%@",BaseUrl,@"Former/equipment/equipdelete?equipmentId=",devid];
+    NSLog(@"deleteDevinfoToSrvFuc:%@",urlstr);
+    urlstr = [urlstr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    [ApplicationDelegate.httpManager POST:urlstr
+                               parameters:nil
+                                 progress:^(NSProgress * _Nonnull uploadProgress) {}
+                                  success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                                      //http请求状态
+                                      if (task.state == NSURLSessionTaskStateCompleted) {
+                                          NSError* error;
+                                          NSDictionary* jsonDic = [NSJSONSerialization
+                                                                   JSONObjectWithData:responseObject
+                                                                   options:kNilOptions
+                                                                   error:&error];
+                                          //NSLog(@"数据：%@",jsonDic);
+                                          NSString *suc=[jsonDic objectForKey:@"msg"];
+                                          
+                                          //
+                                          if ([suc isEqualToString:@"success"]) {
+                                              //成功
+                                              [SVProgressHUD dismiss];
+                                              [self getFarmFromSrv];//刷新农场
+                                              
+                                          } else {
+                                              //失败
+                                              [SVProgressHUD showErrorWithStatus:suc];
+                                          }
+                                          
+                                      } else {
+                                          [SVProgressHUD showErrorWithStatus:k_Error_Network];
+                                          
+                                      }
+                                      
+                                  } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                                      //请求异常
+                                      NSLog(@"error:%@",error);
+                                      [SVProgressHUD showErrorWithStatus:k_Error_Network];
+                                  }];
+    
+}
+
+
+
 @end

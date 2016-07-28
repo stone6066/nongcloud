@@ -13,6 +13,7 @@
 #import "farmModel.h"
 #import "FarmDetailViewController.h"
 #import "AddFarmViewController.h"
+#import "UsrInfoViewController.h"
 
 @interface MainViewController ()
 {
@@ -58,7 +59,14 @@
     
     UIButton *account=[[UIButton alloc]initWithFrame:CGRectMake(fDeviceWidth-40, fDeviceHeight-50, 40, 40)];
     [account setImage:[UIImage imageNamed:@"account"] forState:UIControlStateNormal];
+    [account addTarget:self action:@selector(showUsrInfo) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:account];
+}
+-(void)showUsrInfo{
+    UsrInfoViewController *usrVc=[[UsrInfoViewController alloc]init];
+    usrVc.view.backgroundColor=MyGrayColor;
+    [self.navigationController pushViewController:usrVc animated:YES];
+
 }
 -(void)viewWillAppear:(BOOL)animated
 {

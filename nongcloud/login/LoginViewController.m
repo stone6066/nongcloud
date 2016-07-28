@@ -82,9 +82,11 @@
 -(void)clickloginbtn{
     //[self loginSuccPro];
     if ( _UsrTxtF.text.length<1) {
+        [stdPubFunc stdShowMessage:@"请填写用户名"];
         return;
     }
     if ( _PassTxtF.text.length<1) {
+        [stdPubFunc stdShowMessage:@"请填写密码"];
         return;
     }
     [self loginNetFuc:_UsrTxtF.text passWord:_PassTxtF.text];

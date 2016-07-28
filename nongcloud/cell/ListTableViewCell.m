@@ -10,6 +10,7 @@
 #import "PublicDefine.h"
 #import "farmModel.h"
 #import "deviceInfo.h"
+#import "listCellModel.h"
 
 @implementation ListTableViewCell
 
@@ -64,11 +65,13 @@
     
 }
 
-//-(deviceInfo*)praseDevData:(ListTableViewCell *)LVC{
-//    deviceInfo *RTM=[[farmModel alloc]init];
-//    RTM.farmId=LVC.cellId;
-//    return RTM;
-//}
+-(void)showUiUsrCell:(listCellModel*)NModel{
+    
+    _titleLbl.text=NModel.cellName;
+    _titleImage.image=[UIImage imageNamed:NModel.cellImg];
+    _cellId=NModel.cellId;
+    
+}
 
 -(farmModel*)praseFarmData:(ListTableViewCell *)LVC{
     farmModel *RTM=[[farmModel alloc]init];

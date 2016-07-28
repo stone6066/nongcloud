@@ -419,7 +419,7 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
     DEV.devVersionId=_threeStd.txtId;
     
     DEV.devNo=_DevIdTxt.text;
-    
+    DEV.devAddr=@"";
    
     if (_deviceShowType==0) {//新建设备
         if (_tableDataSource.count>0) {//新加的id比数组最后一个id大1
@@ -937,6 +937,7 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
                                      dev.devTypeId,@"equipmentType",
                                      dev.devFactoryId,@"equipmentFactoryId",
                                      dev.devVersionId,@"equipmentModelId",
+                                     dev.devAddr,@"equipmentAddr",
                                      equipmentSub,@"equipmentSub",
                                      nil];
         [devList addObject:pDict];

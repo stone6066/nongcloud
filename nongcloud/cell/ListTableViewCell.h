@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-@class farmModel,deviceInfo ;
+@class farmModel,deviceInfo,listCellModel ;
 
 @interface ListTableViewCell : UITableViewCell
 @property(nonatomic,strong)UILabel *titleLbl;
@@ -21,4 +21,5 @@
 -(void)showUiFarmCell:(farmModel*)NModel image:(NSString*)imgName;
 -(void)showUiDevCell:(deviceInfo*)NModel image:(NSString*)imgName;
 -(farmModel*)praseFarmData:(ListTableViewCell *)LVC;
+-(void)showUiUsrCell:(listCellModel*)NModel;
 @end
