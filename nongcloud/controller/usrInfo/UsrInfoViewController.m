@@ -11,6 +11,8 @@
 #import "ListTableViewCell.h"
 #import "listCellModel.h"
 #import "UIImageView+WebCache.h"
+#import "PersonInfoViewController.h"
+#import "AlertPswViewController.h"
 
 @interface UsrInfoViewController ()
 
@@ -110,7 +112,8 @@ static NSString * const MarketCellId = @"UsrTableCell";
     [self.view addSubview: bottomVc];
 }
 -(void)clicklogoutbtn{
-
+    ApplicationDelegate.isLogin=NO;
+    [self.navigationController popToRootViewControllerAnimated:NO];
 }
 -(void)loadTopVc{
     CGFloat devH= fDeviceHeight*(1-0.618)-TopSeachHigh;
@@ -161,7 +164,28 @@ static NSString * const MarketCellId = @"UsrTableCell";
     return 40;//餐企商超
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+    switch (indexPath.item) {
+        case 0:
+            [self pushPersonInfo];
+            break;
+        case 1:
+            [self pushAlertPswView];
+            break;
+        default:
+            break;
+    }
    
 }
+-(void)pushPersonInfo{
+    PersonInfoViewController *Pvc=[[PersonInfoViewController alloc]init];
+    [Pvc setUserId:ApplicationDelegate.myLoginInfo.userId];
+    Pvc.view.backgroundColor=collectionBgdColor;
+    [self.navigationController pushViewController:Pvc animated:YES];
+}
+-(void)pushAlertPswView{
+    AlertPswViewController *Pvc=[[AlertPswViewController alloc]init];
+    Pvc.view.backgroundColor=collectionBgdColor;
+    [self.navigationController pushViewController:Pvc animated:YES];
+}
+
 @end

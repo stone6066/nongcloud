@@ -24,6 +24,9 @@
 		891FDC1E1D49E00700D07A1C /* logout.png in Resources */ = {isa = PBXBuildFile; fileRef = 891FDC1B1D49E00700D07A1C /* logout.png */; };
 		891FDC1F1D49E00700D07A1C /* logout@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 891FDC1C1D49E00700D07A1C /* logout@2x.png */; };
 		891FDC201D49E00700D07A1C /* logout@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 891FDC1D1D49E00700D07A1C /* logout@3x.png */; };
+		891FDC231D49E87F00D07A1C /* personInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 891FDC221D49E87F00D07A1C /* personInfoModel.m */; };
+		891FDC261D49E92A00D07A1C /* PersonInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 891FDC251D49E92A00D07A1C /* PersonInfoViewController.m */; };
+		891FDC291D49F77F00D07A1C /* AlertPswViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 891FDC281D49F77F00D07A1C /* AlertPswViewController.m */; };
 		89226DBB1D4844220062C79C /* AlertFarmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89226DBA1D4844220062C79C /* AlertFarmViewController.m */; };
 		89226DBF1D48527F0062C79C /* alter.png in Resources */ = {isa = PBXBuildFile; fileRef = 89226DBC1D48527F0062C79C /* alter.png */; };
 		89226DC01D48527F0062C79C /* alter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89226DBD1D48527F0062C79C /* alter@2x.png */; };
@@ -250,6 +253,12 @@
 		891FDC1B1D49E00700D07A1C /* logout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logout.png; sourceTree = "<group>"; };
 		891FDC1C1D49E00700D07A1C /* logout@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logout@2x.png"; sourceTree = "<group>"; };
 		891FDC1D1D49E00700D07A1C /* logout@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logout@3x.png"; sourceTree = "<group>"; };
+		891FDC211D49E87F00D07A1C /* personInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = personInfoModel.h; sourceTree = "<group>"; };
+		891FDC221D49E87F00D07A1C /* personInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = personInfoModel.m; sourceTree = "<group>"; };
+		891FDC241D49E92A00D07A1C /* PersonInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonInfoViewController.h; sourceTree = "<group>"; };
+		891FDC251D49E92A00D07A1C /* PersonInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonInfoViewController.m; sourceTree = "<group>"; };
+		891FDC271D49F77F00D07A1C /* AlertPswViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertPswViewController.h; sourceTree = "<group>"; };
+		891FDC281D49F77F00D07A1C /* AlertPswViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertPswViewController.m; sourceTree = "<group>"; };
 		89226DB91D4844220062C79C /* AlertFarmViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertFarmViewController.h; sourceTree = "<group>"; };
 		89226DBA1D4844220062C79C /* AlertFarmViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertFarmViewController.m; sourceTree = "<group>"; };
 		89226DBC1D48527F0062C79C /* alter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alter.png; sourceTree = "<group>"; };
@@ -513,8 +522,12 @@
 		891FDC021D49D69800D07A1C /* usrInfo */ = {
 			isa = PBXGroup;
 			children = (
+				891FDC271D49F77F00D07A1C /* AlertPswViewController.h */,
+				891FDC281D49F77F00D07A1C /* AlertPswViewController.m */,
 				891FDC031D49D6A900D07A1C /* UsrInfoViewController.h */,
 				891FDC041D49D6A900D07A1C /* UsrInfoViewController.m */,
+				891FDC241D49E92A00D07A1C /* PersonInfoViewController.h */,
+				891FDC251D49E92A00D07A1C /* PersonInfoViewController.m */,
 			);
 			path = usrInfo;
 			sourceTree = "<group>";
@@ -717,6 +730,8 @@
 				892DCB5B1D3C84CB0058826A /* deviceInfo.m */,
 				891FDC061D49DB9800D07A1C /* listCellModel.h */,
 				891FDC071D49DB9800D07A1C /* listCellModel.m */,
+				891FDC211D49E87F00D07A1C /* personInfoModel.h */,
+				891FDC221D49E87F00D07A1C /* personInfoModel.m */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -1228,14 +1243,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				891FDC231D49E87F00D07A1C /* personInfoModel.m in Sources */,
 				89012BDF1D378658000470EA /* farmModel.m in Sources */,
 				892DCB5C1D3C84CB0058826A /* deviceInfo.m in Sources */,
 				89C47E881D377D91003AC1B1 /* loginInfo.m in Sources */,
+				891FDC291D49F77F00D07A1C /* AlertPswViewController.m in Sources */,
 				892DB2261D36079000B182B6 /* AppDelegate.m in Sources */,
 				89C47E801D377D20003AC1B1 /* stdCallBtn.m in Sources */,
 				89C47E811D377D20003AC1B1 /* stdCellVc.m in Sources */,
 				892DCB6C1D3CC7BF0058826A /* stdTextField.m in Sources */,
 				891FDC081D49DB9800D07A1C /* listCellModel.m in Sources */,
+				891FDC261D49E92A00D07A1C /* PersonInfoViewController.m in Sources */,
 				89C47E831D377D20003AC1B1 /* stdPubFunc.m in Sources */,
 				892DB2231D36079000B182B6 /* main.m in Sources */,
 				892DB22F1D36079000B182B6 /* nongcloud.xcdatamodeld in Sources */,

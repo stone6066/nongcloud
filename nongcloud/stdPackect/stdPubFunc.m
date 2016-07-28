@@ -89,4 +89,9 @@
     [myuser setObject:psw forKey:NSUserDefaultsPsw];
     [myuser synchronize];
 }
++(void)savePassWord:(NSString*)psw{
+    NSUserDefaults *myuser = [NSUserDefaults standardUserDefaults];
+    [myuser setObject:psw forKey:NSUserDefaultsPsw];
+    [myuser synchronize];
+}
 @end

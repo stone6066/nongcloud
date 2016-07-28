@@ -112,8 +112,7 @@
 //登录
 -(void)loginNetFuc:(NSString*)usr passWord:(NSString*)psw{
     [SVProgressHUD showWithStatus:k_Status_Load];
-    //http://192.168.0.21:8080/propies/login/user?userLogin=admin&userPwd=aaaaaa
-    //http://192.168.0.211:8083/Former/login/user?userLogin=admin&userPwd=aaaaaa
+
     NSDictionary *paramDict = @{
                                 @"ut":@"indexVilliageGoods",
                                 };

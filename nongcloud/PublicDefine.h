@@ -143,7 +143,7 @@
 
 #define navigationBarColor RGB(33, 192, 174)
 #define separaterColor RGB(200, 199, 204)
-#define tabTxtColor RGB(107, 107, 107)
+#define tabTxtColor RGB(103, 103, 103)
 #define collectionBgdColor RGB(237, 237, 237)
 #define topSearchBgdColor RGB(1, 172, 102)
 #define SettingViewColor RGB(239, 239, 244)

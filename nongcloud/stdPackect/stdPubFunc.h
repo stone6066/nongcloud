@@ -27,4 +27,5 @@
 
 +(NSString*)getIsLogin;
 
++(void)savePassWord:(NSString*)psw;
 @end
