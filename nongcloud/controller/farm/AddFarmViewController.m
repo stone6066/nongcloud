@@ -455,7 +455,7 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
     UIWindow * window=[[[UIApplication sharedApplication] delegate] window];
     CGRect rect=[sender convertRect: sender.bounds toView:window];
  
-    [self getDataType:sender.tag popRect:rect];
+    [self getDataTypenew:sender.tag popRect:rect];
 }
 -(void)devMenuCilck{
     [self hideRighMenu:self.rightDevMenu];
@@ -879,7 +879,7 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
    
     [dict setObject:_FarmName.text forKey:@"farmName"];
     [dict setObject:_Farm_type.txtId forKey:@"farmTypeId"];
-    [dict setObject:@"1" forKey:@"userId"];
+    [dict setObject:ApplicationDelegate.myLoginInfo.userId forKey:@"userId"];
     [dict setObject:@"" forKey:@"farmId"];
     NSMutableArray *devList=[[NSMutableArray alloc]init];
     
@@ -1172,4 +1172,171 @@ static NSString * const SubDevCellId = @"SubDevTableCell";
         return arrRt;
 
 }
+
+//从本地字典文件中获取数据类型
+-(void)getDataTypenew:(NSInteger)typyNum popRect:(CGRect)rectTmp{
+
+    NSString *urlstr=@"";
+    NSMutableArray * itemArr=[[NSMutableArray alloc]init];
+    switch (typyNum) {
+        case 0://设备类型
+            itemArr=[self readOneDataType];
+            break;
+        case 1://厂家
+            if (_oneStd.txtId.length>0) {
+                itemArr=[self readTwoDataType:_oneStd.txtId];
+            }
+            
+            break;
+        case 2://设备型号
+            if (_twoStd.txtId.length>0)
+                itemArr=[self readThreeDataType:_oneStd.txtId factoryId:_twoStd.txtId];
+            
+            break;
+            
+            
+            
+        case 3://设备类型
+            itemArr=[self readOneDataType];
+            break;
+            
+        case 4://厂家
+            
+            if (_threeSubStd.txtId.length>0)
+                itemArr=[self readTwoDataType:_threeSubStd.txtId];
+            break;
+            
+        case 5://设备型号
+            if (_oneSubStd.txtId.length>0)
+                itemArr=[self readThreeDataType:_threeSubStd.txtId factoryId:_oneSubStd.txtId];
+            break;
+        case 6://获取种植类型
+            
+            itemArr=[self readFarmType];
+            break;
+            
+        default:
+            break;
+    }
+    NSLog(@"urlstr:%@",urlstr);
+    if (itemArr.count<1) {
+        [stdPubFunc stdShowMessage:@"请先选择上一个选项"];
+        return;
+    }
+    
+    [self drawDropDownList:rectTmp.origin.x+rectTmp.size.width/2
+                     ListY:rectTmp.origin.y+rectTmp.size.height
+                 itemWidth:rectTmp.size.width
+                     items:itemArr
+                drawSender:typyNum];
+}
+
+
+-(NSMutableArray*)readOneDataType{
+   
+    NSString *dataFilePath = [DocumentBasePath stringByAppendingFormat:@"/%@.plist", @"getEquipmentType"];
+    NSArray * TypeArr=[[NSArray alloc]initWithContentsOfFile:dataFilePath];
+    NSInteger i=0;
+    NSMutableArray *oneArr=[[NSMutableArray alloc]init];//第1个下拉列表的数据
+//    NSMutableArray *twoArr=[[NSMutableArray alloc]init];//第2个下拉列表的数据
+//    NSMutableArray *threeArr=[[NSMutableArray alloc]init];//第3个下拉列表的数据
+    
+    for (NSDictionary* dict in TypeArr) {
+        i++;
+        [oneArr addObject:[YCXMenuItem menuItem:[dict objectForKey:@"equipmentTypeName"]
+                                         image:nil
+                                           tag:100+i
+                                      userInfo:@{@"title":@"Menu"}
+                                        menuId:[[dict objectForKey:@"equipmentType"]stringValue]]];
+        
+    }
+    return oneArr;
+}
+
+-(NSMutableArray*)readTwoDataType:(NSString*)typeId{
+    
+    NSString *dataFilePath = [DocumentBasePath stringByAppendingFormat:@"/%@.plist", @"getEquipmentType"];
+    NSArray * TypeArr=[[NSArray alloc]initWithContentsOfFile:dataFilePath];
+    NSInteger i=0;
+    NSMutableArray *oneArr=[[NSMutableArray alloc]init];//第1个下拉列表的数据
+    NSMutableArray *twoArr=[[NSMutableArray alloc]init];//第2个下拉列表的数据
+    //    NSMutableArray *threeArr=[[NSMutableArray alloc]init];//第3个下拉列表的数据
+    
+    for (NSDictionary* dict in TypeArr) {
+       
+        NSString *idTmp= [[dict objectForKey:@"equipmentType"]stringValue];
+        if ([typeId isEqualToString:idTmp]) {//找到对应的id
+            oneArr=[dict objectForKey:@"equipmentTypeData"];
+            
+            for (NSDictionary* dictTmp in oneArr) {
+                i++;
+                [twoArr addObject:[YCXMenuItem menuItem:[dictTmp objectForKey:@"equipmentFactoryName"]
+                                                  image:nil
+                                                    tag:100+i
+                                               userInfo:@{@"title":@"Menu"}
+                                                 menuId:[[dictTmp objectForKey:@"equipmentFactoryId"]stringValue]]];
+                
+            }
+        }
+        
+    }
+    return twoArr;
+}
+
+-(NSMutableArray*)readThreeDataType:(NSString*)typeId factoryId:(NSString*)fId{
+    
+    NSString *dataFilePath = [DocumentBasePath stringByAppendingFormat:@"/%@.plist", @"getEquipmentType"];
+    NSArray * TypeArr=[[NSArray alloc]initWithContentsOfFile:dataFilePath];
+    NSInteger i=0;
+    NSMutableArray *oneArr=[[NSMutableArray alloc]init];//第1个下拉列表的数据
+    NSMutableArray *twoArr=[[NSMutableArray alloc]init];//第2个下拉列表的数据
+    NSMutableArray *threeArr=[[NSMutableArray alloc]init];//第3个下拉列表的数据
+    
+    for (NSDictionary* dict in TypeArr) {
+        
+        NSString *idTmp= [[dict objectForKey:@"equipmentType"]stringValue];
+        if ([typeId isEqualToString:idTmp]) {//找到对应的设备类型id
+            oneArr=[dict objectForKey:@"equipmentTypeData"];
+            
+            for (NSDictionary* dictTmp in oneArr) {
+               
+                 NSString *fidTmp= [[dictTmp objectForKey:@"equipmentFactoryId"]stringValue];
+                 if ([fId isEqualToString:fidTmp]) {//找到对应的工厂id
+                    twoArr=[dictTmp objectForKey:@"equipmentFactoryDate"];
+                     for (NSDictionary* dictfct in twoArr) {
+                         i++;
+                         [threeArr addObject:[YCXMenuItem menuItem:[dictfct objectForKey:@"equipmentModelName"]
+                                                           image:nil
+                                                             tag:100+i
+                                                        userInfo:@{@"title":@"Menu"}
+                                                          menuId:[[dictfct objectForKey:@"equipmentModelId"]stringValue]]];
+                     }
+                 }
+            }
+        }
+        
+    }
+    return threeArr;
+}
+
+-(NSMutableArray*)readFarmType{
+    
+    NSString *dataFilePath = [DocumentBasePath stringByAppendingFormat:@"/%@.plist", @"getFarmType"];
+    NSArray * TypeArr=[[NSArray alloc]initWithContentsOfFile:dataFilePath];
+    NSInteger i=0;
+    NSMutableArray *oneArr=[[NSMutableArray alloc]init];//第1个下拉列表的数据
+   
+    
+    for (NSDictionary* dict in TypeArr) {
+        i++;
+        [oneArr addObject:[YCXMenuItem menuItem:[dict objectForKey:@"typeName"]
+                                          image:nil
+                                            tag:100+i
+                                       userInfo:@{@"title":@"Menu"}
+                                         menuId:[[dict objectForKey:@"farmTypeId"]stringValue]]];
+        
+    }
+    return oneArr;
+}
+
 @end

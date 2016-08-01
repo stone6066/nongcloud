@@ -28,4 +28,8 @@
 +(NSString*)getIsLogin;
 
 +(void)savePassWord:(NSString*)psw;
+
++(void)saveToUserDefaults:(id)obj myKey:(NSString*)mkey;
+
++(id)readFormUserDefaults:(NSString*)mkey;
 @end

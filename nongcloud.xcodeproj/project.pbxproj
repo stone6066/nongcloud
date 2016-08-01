@@ -54,6 +54,12 @@
 		892DCB701D3CCCBC0058826A /* dropArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 892DCB6D1D3CCCBC0058826A /* dropArrow.png */; };
 		892DCB711D3CCCBC0058826A /* dropArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 892DCB6E1D3CCCBC0058826A /* dropArrow@2x.png */; };
 		892DCB721D3CCCBC0058826A /* dropArrow@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 892DCB6F1D3CCCBC0058826A /* dropArrow@3x.png */; };
+		894F93ED1D4ED3A3001C027C /* area.plist in Resources */ = {isa = PBXBuildFile; fileRef = 894F93EC1D4ED3A3001C027C /* area.plist */; };
+		894F93FB1D4ED5C9001C027C /* city.plist in Resources */ = {isa = PBXBuildFile; fileRef = 894F93F21D4ED5C9001C027C /* city.plist */; };
+		894F93FC1D4ED5C9001C027C /* HZAreaPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 894F93F41D4ED5C9001C027C /* HZAreaPickerView.m */; };
+		894F93FD1D4ED5C9001C027C /* HZAreaPickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 894F93F51D4ED5C9001C027C /* HZAreaPickerView.xib */; };
+		894F93FE1D4ED5C9001C027C /* HZLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 894F93F71D4ED5C9001C027C /* HZLocation.m */; };
+		894F94031D4F25E9001C027C /* EditTxtViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 894F94021D4F25E9001C027C /* EditTxtViewController.m */; };
 		89C47E701D377499003AC1B1 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89C47E6F1D377499003AC1B1 /* MainViewController.m */; };
 		89C47E741D377CF7003AC1B1 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89C47E731D377CF7003AC1B1 /* LoginViewController.m */; };
 		89C47E7F1D377D20003AC1B1 /* NullSafe.m in Sources */ = {isa = PBXBuildFile; fileRef = 89C47E761D377D20003AC1B1 /* NullSafe.m */; };
@@ -213,6 +219,8 @@
 		89E942891D3E184C00AB04E8 /* homeTopImg.png in Resources */ = {isa = PBXBuildFile; fileRef = 89E942861D3E184C00AB04E8 /* homeTopImg.png */; };
 		89E9428A1D3E184C00AB04E8 /* homeTopImg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89E942871D3E184C00AB04E8 /* homeTopImg@2x.png */; };
 		89E9428B1D3E184C00AB04E8 /* homeTopImg@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 89E942881D3E184C00AB04E8 /* homeTopImg@3x.png */; };
+		89EACD6C1D4B1D4E0083588B /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89EACD6B1D4B1D4E0083588B /* RegisterViewController.m */; };
+		89EACD6F1D4B364A0083588B /* StdUploadFileApi.m in Sources */ = {isa = PBXBuildFile; fileRef = 89EACD6E1D4B364A0083588B /* StdUploadFileApi.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -302,6 +310,15 @@
 		892DCB6D1D3CCCBC0058826A /* dropArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dropArrow.png; sourceTree = "<group>"; };
 		892DCB6E1D3CCCBC0058826A /* dropArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropArrow@2x.png"; sourceTree = "<group>"; };
 		892DCB6F1D3CCCBC0058826A /* dropArrow@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dropArrow@3x.png"; sourceTree = "<group>"; };
+		894F93EC1D4ED3A3001C027C /* area.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = area.plist; path = ../../area.plist; sourceTree = "<group>"; };
+		894F93F21D4ED5C9001C027C /* city.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = city.plist; sourceTree = "<group>"; };
+		894F93F31D4ED5C9001C027C /* HZAreaPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZAreaPickerView.h; sourceTree = "<group>"; };
+		894F93F41D4ED5C9001C027C /* HZAreaPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HZAreaPickerView.m; sourceTree = "<group>"; };
+		894F93F51D4ED5C9001C027C /* HZAreaPickerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HZAreaPickerView.xib; sourceTree = "<group>"; };
+		894F93F61D4ED5C9001C027C /* HZLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZLocation.h; sourceTree = "<group>"; };
+		894F93F71D4ED5C9001C027C /* HZLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HZLocation.m; sourceTree = "<group>"; };
+		894F94011D4F25E9001C027C /* EditTxtViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditTxtViewController.h; sourceTree = "<group>"; };
+		894F94021D4F25E9001C027C /* EditTxtViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditTxtViewController.m; sourceTree = "<group>"; };
 		89C47E6E1D377499003AC1B1 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		89C47E6F1D377499003AC1B1 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		89C47E721D377CF7003AC1B1 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
@@ -469,6 +486,10 @@
 		89E942861D3E184C00AB04E8 /* homeTopImg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = homeTopImg.png; sourceTree = "<group>"; };
 		89E942871D3E184C00AB04E8 /* homeTopImg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "homeTopImg@2x.png"; sourceTree = "<group>"; };
 		89E942881D3E184C00AB04E8 /* homeTopImg@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "homeTopImg@3x.png"; sourceTree = "<group>"; };
+		89EACD6A1D4B1D4E0083588B /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
+		89EACD6B1D4B1D4E0083588B /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
+		89EACD6D1D4B364A0083588B /* StdUploadFileApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StdUploadFileApi.h; sourceTree = "<group>"; };
+		89EACD6E1D4B364A0083588B /* StdUploadFileApi.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StdUploadFileApi.m; sourceTree = "<group>"; };
 		CF143DAE67F19B81EDBA2CDC /* Pods-nongcloud.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nongcloud.debug.xcconfig"; path = "Pods/Target Support Files/Pods-nongcloud/Pods-nongcloud.debug.xcconfig"; sourceTree = "<group>"; };
 		D2A005271D5E4B8B8F2D543A /* Pods-nongcloud.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nongcloud.release.xcconfig"; path = "Pods/Target Support Files/Pods-nongcloud/Pods-nongcloud.release.xcconfig"; sourceTree = "<group>"; };
 		EF7FA19FF8F0F19D59663914 /* Pods_nongcloud.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_nongcloud.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -528,6 +549,8 @@
 				891FDC041D49D6A900D07A1C /* UsrInfoViewController.m */,
 				891FDC241D49E92A00D07A1C /* PersonInfoViewController.h */,
 				891FDC251D49E92A00D07A1C /* PersonInfoViewController.m */,
+				894F94011D4F25E9001C027C /* EditTxtViewController.h */,
+				894F94021D4F25E9001C027C /* EditTxtViewController.m */,
 			);
 			path = usrInfo;
 			sourceTree = "<group>";
@@ -605,6 +628,7 @@
 		892DCB471D3C5FB40058826A /* controller */ = {
 			isa = PBXGroup;
 			children = (
+				894F93EE1D4ED5C9001C027C /* AreaPicker */,
 				891FDC021D49D69800D07A1C /* usrInfo */,
 				892DCB4F1D3C78DA0058826A /* device */,
 				892DCB4B1D3C78D10058826A /* farm */,
@@ -691,11 +715,27 @@
 			path = myicon;
 			sourceTree = "<group>";
 		};
+		894F93EE1D4ED5C9001C027C /* AreaPicker */ = {
+			isa = PBXGroup;
+			children = (
+				894F93EC1D4ED3A3001C027C /* area.plist */,
+				894F93F21D4ED5C9001C027C /* city.plist */,
+				894F93F31D4ED5C9001C027C /* HZAreaPickerView.h */,
+				894F93F41D4ED5C9001C027C /* HZAreaPickerView.m */,
+				894F93F51D4ED5C9001C027C /* HZAreaPickerView.xib */,
+				894F93F61D4ED5C9001C027C /* HZLocation.h */,
+				894F93F71D4ED5C9001C027C /* HZLocation.m */,
+			);
+			path = AreaPicker;
+			sourceTree = "<group>";
+		};
 		89C47E711D377CF7003AC1B1 /* login */ = {
 			isa = PBXGroup;
 			children = (
 				89C47E721D377CF7003AC1B1 /* LoginViewController.h */,
 				89C47E731D377CF7003AC1B1 /* LoginViewController.m */,
+				89EACD6A1D4B1D4E0083588B /* RegisterViewController.h */,
+				89EACD6B1D4B1D4E0083588B /* RegisterViewController.m */,
 			);
 			path = login;
 			sourceTree = "<group>";
@@ -704,6 +744,8 @@
 			isa = PBXGroup;
 			children = (
 				892DCB531D3C7ADA0058826A /* dropDownList */,
+				89EACD6D1D4B364A0083588B /* StdUploadFileApi.h */,
+				89EACD6E1D4B364A0083588B /* StdUploadFileApi.m */,
 				89C47E761D377D20003AC1B1 /* NullSafe.m */,
 				89C47E771D377D20003AC1B1 /* stdCallBtn.h */,
 				89C47E781D377D20003AC1B1 /* stdCallBtn.m */,
@@ -1054,6 +1096,7 @@
 				89C47F651D3780EB003AC1B1 /* notice_selected@2x.png in Resources */,
 				89226DBF1D48527F0062C79C /* alter.png in Resources */,
 				892DCB681D3CC5340058826A /* leftBack@2x.png in Resources */,
+				894F93FD1D4ED5C9001C027C /* HZAreaPickerView.xib in Resources */,
 				89C47F6B1D3780EB003AC1B1 /* personInfo@2x.png in Resources */,
 				89C47F831D3780EB003AC1B1 /* timeIcon@2x.png in Resources */,
 				89C47F881D3780EB003AC1B1 /* usrlevel.png in Resources */,
@@ -1091,6 +1134,7 @@
 				891FDC1A1D49DE8900D07A1C /* setting@3x.png in Resources */,
 				89C47F3F1D3780EB003AC1B1 /* flowTitle@3x.png in Resources */,
 				89C47F691D3780EB003AC1B1 /* noticeList@3x.png in Resources */,
+				894F93FB1D4ED5C9001C027C /* city.plist in Resources */,
 				89C47F511D3780EB003AC1B1 /* lat@3x.png in Resources */,
 				89C47F381D3780EB003AC1B1 /* contacts_selected@2x.png in Resources */,
 				89C47F611D3780EB003AC1B1 /* notice.png in Resources */,
@@ -1117,6 +1161,7 @@
 				89C47F4F1D3780EB003AC1B1 /* lat.png in Resources */,
 				89C47F591D3780EB003AC1B1 /* longt@2x.png in Resources */,
 				891FDC1F1D49E00700D07A1C /* logout@2x.png in Resources */,
+				894F93ED1D4ED3A3001C027C /* area.plist in Resources */,
 				89C47F7F1D3780EB003AC1B1 /* tie.png in Resources */,
 				89E942781D3E07E700AB04E8 /* farmImg@2x.png in Resources */,
 				89C47F411D3780EB003AC1B1 /* gongzhong@2x.png in Resources */,
@@ -1244,8 +1289,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				891FDC231D49E87F00D07A1C /* personInfoModel.m in Sources */,
+				894F93FC1D4ED5C9001C027C /* HZAreaPickerView.m in Sources */,
 				89012BDF1D378658000470EA /* farmModel.m in Sources */,
 				892DCB5C1D3C84CB0058826A /* deviceInfo.m in Sources */,
+				894F93FE1D4ED5C9001C027C /* HZLocation.m in Sources */,
 				89C47E881D377D91003AC1B1 /* loginInfo.m in Sources */,
 				891FDC291D49F77F00D07A1C /* AlertPswViewController.m in Sources */,
 				892DB2261D36079000B182B6 /* AppDelegate.m in Sources */,
@@ -1254,7 +1301,9 @@
 				892DCB6C1D3CC7BF0058826A /* stdTextField.m in Sources */,
 				891FDC081D49DB9800D07A1C /* listCellModel.m in Sources */,
 				891FDC261D49E92A00D07A1C /* PersonInfoViewController.m in Sources */,
+				89EACD6C1D4B1D4E0083588B /* RegisterViewController.m in Sources */,
 				89C47E831D377D20003AC1B1 /* stdPubFunc.m in Sources */,
+				89EACD6F1D4B364A0083588B /* StdUploadFileApi.m in Sources */,
 				892DB2231D36079000B182B6 /* main.m in Sources */,
 				892DB22F1D36079000B182B6 /* nongcloud.xcdatamodeld in Sources */,
 				891FDC051D49D6A900D07A1C /* UsrInfoViewController.m in Sources */,
@@ -1262,6 +1311,7 @@
 				89C47E701D377499003AC1B1 /* MainViewController.m in Sources */,
 				89C47E741D377CF7003AC1B1 /* LoginViewController.m in Sources */,
 				890908931D38613E005B8004 /* MainCollectionViewCell.m in Sources */,
+				894F94031D4F25E9001C027C /* EditTxtViewController.m in Sources */,
 				892DCB4E1D3C78D10058826A /* FarmDetailViewController.m in Sources */,
 				89226DBB1D4844220062C79C /* AlertFarmViewController.m in Sources */,
 				892DCB5F1D3C9DA00058826A /* ListTableViewCell.m in Sources */,

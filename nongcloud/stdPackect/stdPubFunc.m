@@ -94,4 +94,14 @@
     [myuser setObject:psw forKey:NSUserDefaultsPsw];
     [myuser synchronize];
 }
+
++(void)saveToUserDefaults:(id)obj myKey:(NSString*)mkey{
+    NSUserDefaults *myuser = [NSUserDefaults standardUserDefaults];
+    [myuser setObject:obj forKey:mkey];
+    [myuser synchronize];
+}
++(id)readFormUserDefaults:(NSString*)mkey{
+    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+    return [user objectForKey:mkey];
+}
 @end

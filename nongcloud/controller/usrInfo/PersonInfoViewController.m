@@ -9,16 +9,22 @@
 #import "PersonInfoViewController.h"
 #import "PublicDefine.h"
 #import "ListTableViewCell.h"
+#import "HZAreaPickerView.h"
+#import "EditTxtViewController.h"
 
-@interface PersonInfoViewController ()
-
+@interface PersonInfoViewController ()<HZAreaPickerDelegate, HZAreaPickerDatasource>
+{
+    UITableViewCellEditingStyle _editingStyle;
+}
 @end
 
 @implementation PersonInfoViewController
+@synthesize locatePicker=_locatePicker;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     _tableData=[[NSMutableArray alloc]init];
+    _editingStyle = UITableViewCellEditingStyleDelete;
     [self loadTopNav];
     [self loadTableView];
     [self getPerinfoFromSvr:_userId];
@@ -92,6 +98,7 @@ static NSString * const MarketCellId = @"PersonTableCell";
     //    // 将数据视图框架模型(该模型中包含了数据模型)赋值给Cell，
     cell.textLabel.text=_tableData[indexPath.item];
     [cell.textLabel setFont:[UIFont systemFontOfSize:14]];
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
     
     
@@ -103,9 +110,63 @@ static NSString * const MarketCellId = @"PersonTableCell";
     return 40;//餐企商超
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+    if (indexPath.item==2) {
+        
+    }
+    switch (indexPath.item) {
+        case 0://昵称
+            [self pushEditView:@"昵称"];
+            break;
+        case 1://电话
+            [self pushTelView:@"电话"];
+            break;
+        case 2://地区
+            [self clickStartbtn];
+            break;
+        default:
+            break;
+    }
     
 }
+-(void)pushTelView:(NSString*)viewtitle{
+    EditTxtViewController *editVc=[[EditTxtViewController alloc]init];
+    [editVc setViewTitle:viewtitle];
+    editVc.view.backgroundColor=[UIColor whiteColor];
+    
+    
+    editVc.EditTxtBlock = ^(EditTxtViewController *aqrvc,NSString *qrString){
+        NSLog(@"%@",qrString);
+        
+        NSString*  urlpartstr=[NSString stringWithFormat:@"&userPhone=%@",qrString];
+        NSString*  tstr=[NSString stringWithFormat:@"电话：%@",qrString];
+        [self alertUsrInfo:ApplicationDelegate.myLoginInfo.userId usrstr:urlpartstr tableStr:tstr tableIndex:1];
+    };
+    
+    
+    [self.navigationController pushViewController:editVc animated:YES];
+    
+}
+-(void)pushEditView:(NSString*)viewtitle{
+    EditTxtViewController *editVc=[[EditTxtViewController alloc]init];
+    [editVc setViewTitle:viewtitle];
+    editVc.view.backgroundColor=[UIColor whiteColor];
+    
+    
+    editVc.EditTxtBlock = ^(EditTxtViewController *aqrvc,NSString *qrString){
+        NSLog(@"%@",qrString);
+        
+        NSString*  urlpartstr=[NSString stringWithFormat:@"&userName=%@",qrString];
+         NSString*  tstr=[NSString stringWithFormat:@"昵称：%@",qrString];
+        [self alertUsrInfo:ApplicationDelegate.myLoginInfo.userId usrstr:urlpartstr tableStr:tstr tableIndex:0];
+    };
+    
+    
+    [self.navigationController pushViewController:editVc animated:YES];
+    
+}
+
+
+
 
 -(void)getPerinfoFromSvr:(NSString*)usrid{
     [SVProgressHUD showWithStatus:k_Status_Load];
@@ -139,9 +200,13 @@ static NSString * const MarketCellId = @"PersonTableCell";
                                                   
                                                    [_tableData addObject: [NSString stringWithFormat:@"电话：%@",[dicttmp objectForKey:@"userPhone"]]];
                                                   
+                                                  [_tableData addObject: [NSString stringWithFormat:@"所在地区：%@%@%@",[dicttmp objectForKey:@"province"],[dicttmp objectForKey:@"city"],[dicttmp objectForKey:@"district"]]];
+                                                  
                                                    [_tableData addObject: [NSString stringWithFormat:@"最近登录经度：%@",[dicttmp objectForKey:@"lastLongitude"]]];
                                                   
                                                    [_tableData addObject: [NSString stringWithFormat:@"最近登录纬度：%@",[dicttmp objectForKey:@"lastLatitude"]]];
+                                                  
+                                                  
                                                   
                                                   
                                               }
@@ -150,6 +215,109 @@ static NSString * const MarketCellId = @"PersonTableCell";
                                               
                                               [SVProgressHUD dismiss];
                                              
+                                          } else {
+                                              //失败
+                                              [SVProgressHUD showErrorWithStatus:suc];
+                                          }
+                                          
+                                      } else {
+                                          [SVProgressHUD showErrorWithStatus:k_Error_Network];
+                                          
+                                      }
+                                      
+                                  } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                                      //请求异常
+                                      NSLog(@"error:%@",error);
+                                      [SVProgressHUD showErrorWithStatus:k_Error_Network];
+                                  }];
+    
+}
+-(void)clickStartbtn{
+    //AreaFlag=0;
+    self.locatePicker = [[HZAreaPickerView alloc] initWithStyle:HZAreaPickerWithStateAndCityAndDistrict
+                                                   withDelegate:self
+                                                  andDatasource:self];
+    [self.locatePicker showInView:self.view];
+}
+
+-(NSArray *)areaPickerData:(HZAreaPickerView *)picker
+{
+    NSArray *data;
+    if (picker.pickerStyle == HZAreaPickerWithStateAndCityAndDistrict) {
+        data = [[NSArray alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"area.plist" ofType:nil]] ;
+    } else{
+        data = [[NSArray alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"city.plist" ofType:nil]];
+    }
+    return data;
+}
+#pragma mark - HZAreaPicker delegate
+-(void)pickerDidChaneStatus:(HZAreaPickerView *)picker
+{
+    //
+    NSString* ss=@"";
+    if (picker.pickerStyle == HZAreaPickerWithStateAndCityAndDistrict) {
+         ss = [NSString stringWithFormat:@"%@ %@ %@ %@ %@ %@", picker.locate.state, picker.locate.city, picker.locate.district,picker.locate.stateid,picker.locate.cityid,picker.locate.districtid];
+        
+    } else{
+        ss = [NSString stringWithFormat:@"%@ %@", picker.locate.state, picker.locate.city];
+    }
+    NSString *upinfo=@"";
+    if (picker.locate.districtid) {
+        upinfo=[NSString stringWithFormat:@"&nationId=%@",picker.locate.districtid];
+    }
+    else{
+        upinfo=[NSString stringWithFormat:@"&nationId=%@",picker.locate.cityid];
+    }
+    
+    NSString *tableStr=[NSString stringWithFormat:@"所在地区：%@%@%@",picker.locate.state,picker.locate.city,picker.locate.district];
+
+    [self alertUsrInfo:ApplicationDelegate.myLoginInfo.userId usrstr:upinfo tableStr:tableStr tableIndex:2];
+    
+    
+    NSLog(@"pickerDidChaneStatus:%@",ss);
+}
+
+
+
+
+-(void)cancelLocatePicker
+{
+    [self.locatePicker cancelPicker];
+    self.locatePicker.delegate = nil;
+    self.locatePicker = nil;
+}
+
+
+-(void)alertUsrInfo:(NSString*)usrid usrstr:(NSString*)str tableStr:(NSString*)tstr tableIndex:(NSInteger)myindex{
+    [SVProgressHUD showWithStatus:k_Status_Load];
+    
+    //http://192.168.0.21:8080/Former/login/userLogin?userName=测试用户1&nationId=2&userId=3
+    NSString *urlstr=[NSString stringWithFormat:@"%@%@%@%@",BaseUrl,@"Former/login/userLogin?userId=",usrid,str];
+    NSLog(@"getPerinfoSrvFuc:%@",urlstr);
+    urlstr = [urlstr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    [ApplicationDelegate.httpManager POST:urlstr
+                               parameters:nil
+                                 progress:^(NSProgress * _Nonnull uploadProgress) {}
+                                  success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                                      //http请求状态
+                                      if (task.state == NSURLSessionTaskStateCompleted) {
+                                          NSError* error;
+                                          NSDictionary* jsonDic = [NSJSONSerialization
+                                                                   JSONObjectWithData:responseObject
+                                                                   options:kNilOptions
+                                                                   error:&error];
+                                          //NSLog(@"数据：%@",jsonDic);
+                                          NSString *suc=[jsonDic objectForKey:@"msg"];
+                                          
+                                          //
+                                          if ([suc isEqualToString:@"success"]) {
+                                              //成功
+                                              [SVProgressHUD dismiss];
+                                              [_tableData replaceObjectAtIndex:myindex withObject:tstr];
+                                              [_TableView reloadData];
+                                              
+                                              
                                           } else {
                                               //失败
                                               [SVProgressHUD showErrorWithStatus:suc];

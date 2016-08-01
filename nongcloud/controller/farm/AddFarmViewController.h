@@ -48,4 +48,5 @@
 @property(nonatomic,assign)NSInteger deviceShowType;//设备编辑类型 0新建 1编辑
 @property(nonatomic,assign)NSInteger subDeviceShowType;//设备编辑类型 0新建 1编辑
 @property(nonatomic,assign)NSInteger selectedTableIndex;//设备编辑类型 0新建 1编辑
+
 @end

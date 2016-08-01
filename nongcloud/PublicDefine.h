@@ -47,6 +47,7 @@
 #define NSUserDefaultsUsers @"userName"
 #define NSUserDefaultsPsw @"password"
 #define NSUserIsLogin @"IsLogin"
+#define NSUserLoginMsg @"userMsg"
 
 //#define NetUrl @"http://shop.anquan365.org/nst/common.htm?"
 #define MainUrl @"http://shop.anquan365.org/"

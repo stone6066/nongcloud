@@ -8,7 +8,8 @@
 
 #import "AppDelegate.h"
 #import "MainViewController.h"
-
+#import "PublicDefine.h"
+#import "stdPubFunc.h"
 @interface AppDelegate ()
 
 @end
@@ -37,7 +38,8 @@
 {
     self.httpManager = [AFHTTPSessionManager manager];
     self.httpManager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    
+    [self downLoadDictVerson:@"getEquipmentType"];//下载设备类型字典
+    [self downLoadDictVerson:@"getFarmType"];//下载农场类型
 }
 
 -(void)enterMainWindow{
@@ -152,5 +154,118 @@
         }
     }
 }
+
+
+#pragma download dictData
+-(void)downLoadDictData:(NSString*)loadStr version:(NSString*)vid{
+
+    NSString *urlstr=[NSString stringWithFormat:@"%@%@%@",BaseUrl,@"Former/dict/",loadStr];
+    NSLog(@"urlstr:%@",urlstr);
+    [ApplicationDelegate.httpManager POST:urlstr
+                               parameters:nil
+                                 progress:^(NSProgress * _Nonnull uploadProgress) {}
+                                  success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                                      //http请求状态
+                                      if (task.state == NSURLSessionTaskStateCompleted) {
+                                          NSError* error;
+                                          NSDictionary* jsonDic = [NSJSONSerialization
+                                                                   JSONObjectWithData:responseObject
+                                                                   options:kNilOptions
+                                                                   error:&error];
+                                          //NSLog(@"数据：%@",jsonDic);
+                                          NSString *suc=[jsonDic objectForKey:@"msg"];
+                                          
+                                          //
+                                          if ([suc isEqualToString:@"success"]) {
+                                              //成功
+                                              NSArray *DictArr=[jsonDic objectForKey:@"data"];
+                                              NSString *carBrandModelPath = [DocumentBasePath stringByAppendingFormat:@"/%@.plist", loadStr];
+                                              
+                                              BOOL saveResult = [DictArr writeToFile:carBrandModelPath atomically:YES];
+                                              if (saveResult) {
+                                                  //保持版本号到本地
+                                                  [stdPubFunc saveToUserDefaults:vid myKey:loadStr];
+                                                  NSLog(@"写入 %@ 数据字典成功", loadStr);
+                                              }
+                                              else {
+                                                  
+                                                  NSLog(@"写入 %@ 数据字典失败", loadStr);
+                                              }
+
+                                              
+                                              
+                                          }else if([suc isEqualToString:@"无数据"])
+                                          {
+                                              
+                                          }
+                                          else {
+                                              //失败
+                                             
+                                              
+                                          }
+                                          
+                                      } else {
+                                          
+                                      }
+                                      
+                                  } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                                      //请求异常
+                                     
+                                  }];
+    
+}
+
+-(void)downLoadDictVerson:(NSString*)loadStr{
+    NSString *urlstr=[NSString stringWithFormat:@"%@%@%@",BaseUrl,@"Former/dict/getDictNum?dictName=",loadStr];
+    NSLog(@"downLoadDictVerson:%@",urlstr);
+    [ApplicationDelegate.httpManager POST:urlstr
+                               parameters:nil
+                                 progress:^(NSProgress * _Nonnull uploadProgress) {}
+                                  success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                                      //http请求状态
+                                      if (task.state == NSURLSessionTaskStateCompleted) {
+                                          NSError* error;
+                                          NSDictionary* jsonDic = [NSJSONSerialization
+                                                                   JSONObjectWithData:responseObject
+                                                                   options:kNilOptions
+                                                                   error:&error];
+                                          //NSLog(@"数据：%@",jsonDic);
+                                          NSString *suc=[jsonDic objectForKey:@"msg"];
+                                          
+                                          //
+                                          if ([suc isEqualToString:@"success"]) {
+                                              //成功
+                                              NSDictionary *DictArr=[jsonDic objectForKey:@"data"];
+                                              {
+                                                  NSString *verStr=[DictArr objectForKey:@"dictNum"];
+                                               
+                                                  NSString *localStr=[stdPubFunc readFormUserDefaults:loadStr];
+                                                  if (![verStr isEqualToString:localStr]) {//需要升级
+                                                      [self downLoadDictData:loadStr version:verStr];
+                                                  }
+                                              }
+                                              
+                                              
+                                          }else if([suc isEqualToString:@"无数据"])
+                                          {
+                                              
+                                          }
+                                          else {
+                                              //失败
+                                              
+                                              
+                                          }
+                                          
+                                      } else {
+                                          
+                                      }
+                                      
+                                  } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                                      //请求异常
+                                      
+                                  }];
+    
+}
+
 
 @end

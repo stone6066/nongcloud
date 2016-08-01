@@ -23,7 +23,8 @@
 @property(nonatomic,copy)NSString *orgLevel;//组织机构级别
 @property(nonatomic,copy)NSString *pushToken;//消息推送关键key
 @property(nonatomic,copy)NSString *portrait;//头像路径
-
+@property(nonatomic,copy)NSString *usrlog;
+@property(nonatomic,copy)NSString *usrpsw;
 
 - (loginInfo *)asignInfoWithDict:(NSDictionary *)dict;
 @end

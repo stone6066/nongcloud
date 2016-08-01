@@ -14,6 +14,7 @@
 #import "PersonInfoViewController.h"
 #import "AlertPswViewController.h"
 
+
 @interface UsrInfoViewController ()
 
 @end
@@ -22,6 +23,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _iconImg=[[UIImageView alloc]init];
     [self loadTopNav];
     [self loadTopVc];
     listCellModel *LM1=[[listCellModel alloc]init];
@@ -41,6 +43,7 @@
     _tableData=[[NSArray alloc]initWithObjects:LM1,LM2,LM3, nil];
     [self loadTableView];
     [_TableView reloadData];
+    [self getPerinfoFromSvr:ApplicationDelegate.myLoginInfo.userId];//获取头像
     // Do any additional setup after loading the view.
 }
 
@@ -121,22 +124,28 @@ static NSString * const MarketCellId = @"UsrTableCell";
     topVc.backgroundColor=topSearchBgdColor;
     
     
-    UIImageView *iconImg=[[UIImageView alloc]initWithFrame:CGRectMake((fDeviceWidth-(devH-20))/2, 10, devH-20, devH-20)];
+    _iconImgNew=[[UIImageView alloc]initWithFrame:CGRectMake((fDeviceWidth-(devH-20))/2, 10, devH-20, devH-20)];
     
+    _iconImgNew.image=[UIImage imageNamed:@"name"];
+    //[_iconImg sd_setImageWithURL:[NSURL URLWithString:@"http://img1.cache.netease.com/catchpic/F/FA/FAE5092DBC8408FD891B53D4A92AE5DA.jpg"]];
     
-    [iconImg sd_setImageWithURL:[NSURL URLWithString:@"http://img1.cache.netease.com/catchpic/F/FA/FAE5092DBC8408FD891B53D4A92AE5DA.jpg"]];
-    
-    iconImg.layer.masksToBounds = YES;
-    iconImg.layer.cornerRadius = CGRectGetHeight(iconImg.bounds)/2;
+    _iconImgNew.layer.masksToBounds = YES;
+    _iconImgNew.layer.cornerRadius = CGRectGetHeight(_iconImgNew.bounds)/2;
     //    注意这里的ImageView 的宽和高都要相等
     //    layer.cornerRadiu 设置的是圆角的半径
     //    属性border 添加一个镶边
-    iconImg.layer.borderWidth = 0.5f;
-    iconImg.layer.borderColor = [[UIColor lightGrayColor] CGColor];
-    [topVc addSubview:iconImg];
+    _iconImgNew.layer.borderWidth = 0.5f;
+    _iconImgNew.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+    [topVc addSubview:_iconImgNew];
 
-    
+    UIButton *iconBtn=[[UIButton alloc]initWithFrame:CGRectMake((fDeviceWidth-(devH-20))/2, 10, devH-20, devH-20)];
+    [iconBtn addTarget:self action:@selector(iconbtnClick) forControlEvents:UIControlEventTouchUpInside];
+    [topVc addSubview:iconBtn];
     [self.view addSubview:topVc];
+}
+
+-(void)iconbtnClick{
+    [self btnActionForEditPortrait:nil];
 }
 #pragma mark table delegate
 
@@ -188,4 +197,337 @@ static NSString * const MarketCellId = @"UsrTableCell";
     [self.navigationController pushViewController:Pvc animated:YES];
 }
 
+
+//从相册中选取图片或拍照
+- (void)btnActionForEditPortrait:(id) sender {
+    UIActionSheet *sheet;
+    
+    // 判断是否支持相机
+    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+    {
+        sheet  = [[UIActionSheet alloc] initWithTitle:@"选择" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"取消" otherButtonTitles:@"拍照",@"从相册选择", nil];
+    }
+    else {
+        
+        sheet = [[UIActionSheet alloc] initWithTitle:@"选择" delegate:self cancelButtonTitle:nil destructiveButtonTitle:@"取消" otherButtonTitles:@"从相册选择", nil];
+    }
+    
+    sheet.tag = 255;
+    
+    [sheet showInView:self.view];
+}
+#pragma mark - actionsheet delegate
+-(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (actionSheet.tag == 255) {
+        
+        NSUInteger sourceType = 0;
+        
+        // 判断是否支持相机
+        if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+            
+            switch (buttonIndex) {
+                case 0:
+                    // 取消
+                    return;
+                case 1:
+                    // 相机
+                    
+                    sourceType = UIImagePickerControllerSourceTypeCamera;
+                    break;
+                    
+                case 2:
+                    // 相册
+                    sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                    break;
+            }
+        }
+        else {
+            if (buttonIndex == 0) {
+                
+                return;
+            } else {
+                sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+            }
+        }
+        // 跳转到相机或相册页面
+        UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+        
+        imagePickerController.delegate = self;
+        
+        imagePickerController.allowsEditing = YES;
+        
+        imagePickerController.sourceType = sourceType;
+        
+        [self presentViewController:imagePickerController animated:YES completion:^{}];
+        
+    }
+}
+
+-(NSData *)makeMyUpImg:(UIImage*)valueToSend{
+    
+    UIImage* tmpImage = (UIImage*)valueToSend;
+    UIImage* contextedImage;
+    CGAffineTransform transform = CGAffineTransformIdentity;
+    if ([valueToSend isKindOfClass:[UIImage class]]) {
+        
+        if (tmpImage.imageOrientation == UIImageOrientationUp) {
+            
+            contextedImage = tmpImage;
+            
+        }
+        
+        else{
+            
+            switch (tmpImage.imageOrientation ) {
+                    
+                case UIImageOrientationDown:
+                    
+                case UIImageOrientationDownMirrored:
+                    
+                    transform = CGAffineTransformTranslate(transform, tmpImage.size.width, tmpImage.size.height);
+                    
+                    transform = CGAffineTransformRotate(transform, M_PI);
+                    
+                    break;
+                    
+                case UIImageOrientationLeft:
+                    
+                case UIImageOrientationLeftMirrored:
+                    
+                    transform = CGAffineTransformTranslate(transform, tmpImage.size.width, 0);
+                    
+                    transform = CGAffineTransformRotate(transform, M_PI_2);
+                    
+                    break;
+                    
+                case UIImageOrientationRight:
+                    
+                case UIImageOrientationRightMirrored:
+                    
+                    transform = CGAffineTransformTranslate(transform, 0,tmpImage.size.height);
+                    
+                    transform = CGAffineTransformRotate(transform, -M_PI_2);
+                    
+                    break;
+                    
+                default:
+                    
+                    break;
+                    
+            }
+            
+            
+            switch (tmpImage.imageOrientation) {
+                    
+                case UIImageOrientationUpMirrored:
+                    
+                case UIImageOrientationDownMirrored:
+                    
+                    transform = CGAffineTransformTranslate(transform, tmpImage.size.width, 0);
+                    
+                    transform = CGAffineTransformScale(transform, -1, 1);
+                    
+                    break;
+                    
+                case UIImageOrientationLeftMirrored:
+                    
+                case UIImageOrientationRightMirrored:
+                    
+                    transform = CGAffineTransformTranslate(transform, tmpImage.size.height, 0);
+                    
+                    transform = CGAffineTransformScale(transform, -1, 1);
+                    
+                    break;
+                    
+                default:
+                    
+                    break;
+                    
+            }
+            
+            CGContextRef ctx = CGBitmapContextCreate(NULL, tmpImage.size.width, tmpImage.size.height, CGImageGetBitsPerComponent(tmpImage.CGImage), 0, CGImageGetColorSpace(tmpImage.CGImage), CGImageGetBitmapInfo(tmpImage.CGImage));
+            
+            
+            CGContextConcatCTM(ctx, transform);
+            
+            
+            
+            switch (tmpImage.imageOrientation) {
+                    
+                case UIImageOrientationLeft:
+                    
+                case UIImageOrientationLeftMirrored:
+                    
+                case UIImageOrientationRight:
+                    
+                case UIImageOrientationRightMirrored:
+                    
+                    CGContextDrawImage(ctx, CGRectMake(0, 0, tmpImage.size.height,tmpImage.size.width), tmpImage.CGImage);
+                    
+                    break;
+                    
+                default:
+                    
+                    CGContextDrawImage(ctx, CGRectMake(0, 0, tmpImage.size.width, tmpImage.size.height), tmpImage.CGImage);
+                    
+                    break;
+                    
+            }
+            
+            CGImageRef cgimg = CGBitmapContextCreateImage(ctx);
+            
+            contextedImage = [UIImage imageWithCGImage:cgimg];
+            
+            CGContextRelease(ctx);
+            
+            CGImageRelease(cgimg);
+            
+            
+        }
+    }
+    NSData *data = UIImageJPEGRepresentation(contextedImage, 0.1);
+    return data;
+}
+#pragma mark - 保存图片至沙盒
+- (void) saveImage:(UIImage *)currentImage withName:(NSString *)imageName
+{
+
+    NSData *imageData=[self makeMyUpImg:currentImage];
+    NSString *fullPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:imageName];
+    
+    // 将图片写入文件
+    _imgFullpath=fullPath;
+    NSLog(@"fullPath:%@",fullPath);
+    [imageData writeToFile:fullPath atomically:NO];
+}
+
+#pragma mark - image picker delegte
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    [picker dismissViewControllerAnimated:YES completion:^{}];
+    
+    UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    
+    [self saveImage:image withName:@"currentImage.png"];
+    
+    NSString *fullPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"currentImage.png"];
+    
+    UIImage *savedImage = [[UIImage alloc] initWithContentsOfFile:fullPath];
+    
+    _isFullScreen = NO;
+    
+    [self.iconImg setImage:savedImage];
+    [self imgUpload];
+    self.iconImg.tag = 100;
+    [_iconImgNew setImage:savedImage];
+    
+}
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [self dismissViewControllerAnimated:YES completion:^{}];
+}
+
+-(void)loadProgress{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, TopSeachHigh, fDeviceWidth, fDeviceHeight)];
+    [view setTag:108];
+    [view setBackgroundColor:[UIColor blackColor]];
+    [view setAlpha:0.5];
+    
+    
+    _progressView = [[UIProgressView alloc] initWithFrame:CGRectMake(fDeviceWidth/2-75, 180, 150, 20)];
+    _progressView.transform = CGAffineTransformMakeScale(1.0f,2.0f);
+    [_progressView setProgressViewStyle:UIProgressViewStyleDefault]; //设置进度条类型
+    [view addSubview:_progressView];
+    
+    [self.view addSubview:view];
+    
+}
+
+-(void)imgUpload{
+    NSString *Path = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"currentImage.png"];
+    StdUploadFileApi *upRequst=[[StdUploadFileApi alloc]init];
+    upRequst.delegate=self;
+    [self loadProgress];
+    if (_iconImg.image) {
+        NSString *urlstr=[NSString stringWithFormat:@"%@%@%@",BaseUrl,@"Former/login/upImg?userId=",ApplicationDelegate.myLoginInfo.userId];
+        [upRequst stdUploadFileWithProgress:urlstr filePath:Path fileName:@"currentImage.png" mimeType:@"image/jpeg" pragram:nil];
+        
+    }
+
+}
+
+
+#pragma mark StdUploadFileApi delegate
+-(void)stdUploadProgress:(float)progress{
+    [_progressView setProgress:progress];
+    if (progress>0.99) {
+        UIView *view = (UIView*)[self.view viewWithTag:108];
+        [view removeFromSuperview];
+    }
+    
+    NSLog(@"上传进度：%f",progress);
+}
+-(void)stdUploadError:(NSError *)err
+{
+    //NSLog(@"%@",err);
+}
+
+-(void)stdUploadSucc:(NSURLResponse *)Response responseObject:(id)respObject{
+     NSLog(@"stdUploadSucc：%@----%@",Response,respObject);
+}
+
+
+-(void)getPerinfoFromSvr:(NSString*)usrid{
+
+    NSString *urlstr=[NSString stringWithFormat:@"%@%@%@",BaseUrl,@"Former/login/userInfo?userId=",usrid];
+    NSLog(@"getPerinfoSrvFuc:%@",urlstr);
+    urlstr = [urlstr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+
+    [ApplicationDelegate.httpManager POST:urlstr
+                               parameters:nil
+                                 progress:^(NSProgress * _Nonnull uploadProgress) {}
+                                  success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                                      //http请求状态
+                                      if (task.state == NSURLSessionTaskStateCompleted) {
+                                          NSError* error;
+                                          NSDictionary* jsonDic = [NSJSONSerialization
+                                                                   JSONObjectWithData:responseObject
+                                                                   options:kNilOptions
+                                                                   error:&error];
+                                          //NSLog(@"数据：%@",jsonDic);
+                                          NSString *suc=[jsonDic objectForKey:@"msg"];
+                                          
+                                          //
+                                          if ([suc isEqualToString:@"success"]) {
+                                              //成功
+                                              NSArray *usrArr=[jsonDic objectForKey:@"data"];
+                                              for (NSDictionary *dicttmp in usrArr) {
+                                                  
+                                                  NSString *imgUrl=[dicttmp objectForKey:@"portrait"];
+                                                  imgUrl=[NSString stringWithFormat:@"%@%@",BaseUrl,imgUrl];
+                                                  NSLog(@"imgUrl:%@",imgUrl);
+                                                  [_iconImgNew sd_setImageWithURL:[NSURL URLWithString:imgUrl]];
+   
+                                              }
+
+                                        
+                                              
+                                          } else {
+                                              //失败
+                                              [SVProgressHUD showErrorWithStatus:suc];
+                                          }
+                                          
+                                      } else {
+                                          [SVProgressHUD showErrorWithStatus:k_Error_Network];
+                                          
+                                      }
+                                      
+                                  } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                                      //请求异常
+                                      NSLog(@"error:%@",error);
+                                      [SVProgressHUD showErrorWithStatus:k_Error_Network];
+                                  }];
+    
+}
 @end

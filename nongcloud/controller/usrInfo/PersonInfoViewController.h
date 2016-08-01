@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class HZAreaPickerView;
 @interface PersonInfoViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,strong)UITableView *TableView;
 @property(nonatomic,strong)NSMutableArray *tableData;
 @property(nonatomic,copy)NSString *userId;
-
+@property (strong, nonatomic) HZAreaPickerView *locatePicker;
 @end

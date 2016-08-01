@@ -10,6 +10,7 @@
 #import "PublicDefine.h"
 #import "loginInfo.h"
 #import "stdPubFunc.h"
+#import "RegisterViewController.h"
 
 @interface LoginViewController ()<UITextFieldDelegate>
 
@@ -24,6 +25,7 @@
     tapGestureRecognizer.cancelsTouchesInView = NO;
     //将触摸事件添加到当前view
     [self.view addGestureRecognizer:tapGestureRecognizer];
+    [self std_regsNotification];
     [self loadLoginView];
     // Do any additional setup after loading the view.
 }
@@ -71,13 +73,29 @@
     logobtnImg.image=[UIImage imageNamed:@"logBtn"];
     [self.view addSubview:logobtnImg];
     
-    _LoginBtn=[[UIButton alloc]initWithFrame:CGRectMake(10, fDeviceHeight/2+50, fDeviceWidth-20, 50)];
+    _LoginBtn=[[UIButton alloc]initWithFrame:CGRectMake(10, fDeviceHeight/2+47, fDeviceWidth-20, 50)];
     
     [_LoginBtn addTarget:self action:@selector(clickloginbtn) forControlEvents:UIControlEventTouchUpInside];
     
     [_LoginBtn setTitle:@"登   录"forState:UIControlStateNormal];// 添加文字
     
     [self.view addSubview:_LoginBtn];
+    
+    UILabel * zhuceLbl=[[UILabel alloc]initWithFrame:CGRectMake(10, fDeviceHeight/2+100, fDeviceWidth-20, 20)];
+    zhuceLbl.text=@"注册新用户";
+    [zhuceLbl setTextAlignment:NSTextAlignmentCenter];
+    [zhuceLbl setTextColor:topSearchBgdColor];
+    [zhuceLbl setFont:[UIFont systemFontOfSize:14]];
+    
+    UIButton *zhuceBtn=[[UIButton alloc]initWithFrame:CGRectMake(10, fDeviceHeight/2+100, fDeviceWidth-20, 20)];
+    [zhuceBtn addTarget:self action:@selector(clickzhucebtn) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:zhuceLbl];
+    [self.view addSubview:zhuceBtn];
+}
+-(void)clickzhucebtn{
+    RegisterViewController * Rvc=[[RegisterViewController alloc]init];
+    Rvc.view.backgroundColor=[UIColor whiteColor];
+    [self.navigationController pushViewController:Rvc animated:YES];
 }
 -(void)clickloginbtn{
     //[self loginSuccPro];
@@ -218,6 +236,30 @@
                                   }];
     
 }
+- (void) dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:NSUserLoginMsg
+                                                  object:nil];
+    
+}
 
+-(void)std_regsNotification{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(execute:)
+                                                 name:NSUserLoginMsg
+                                               object:nil];
+    
+
+}
+
+- (void)execute:(NSNotification *)notification {
+    if([notification.name isEqualToString:NSUserLoginMsg] ){
+        loginInfo *logtmp=notification.object;
+        _UsrTxtF.text=logtmp.usrlog;
+        _PassTxtF.text=logtmp.usrpsw;
+        [self clickloginbtn];
+    }
+}
 
 @end
